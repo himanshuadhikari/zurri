@@ -32,6 +32,16 @@ export function getTokenFromRequest(request: NextRequest): string | null {
   return null;
 }
 
+export function getTokenFromCookie(request: NextRequest): string | null {
+  const authHeader = request.cookies.get('auth_token')?.value;
+  if (authHeader) {
+    return authHeader;
+  }
+  return null;
+}
+
+
+
 export async function getUserFromToken(token: string) {
   const decoded = verifyJWT(token);
   if (!decoded) return null;

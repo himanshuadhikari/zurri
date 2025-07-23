@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import ProductsClient from '@/components/ProductsClient';
+import ProductsClient from '@/components/ui/ProductsClient';
 
 async function getCategoryProducts(categorySlug: string, searchParams: any) {
   const category = await prisma.category.findUnique({

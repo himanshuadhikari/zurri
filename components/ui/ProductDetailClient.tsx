@@ -20,6 +20,7 @@ interface Product {
   sizes: string[];
   colors: string[];
   stock: number;
+  slug: string,
   category: {
     id: number;
     name: string;
@@ -43,7 +44,6 @@ interface ProductDetailClientProps {
 }
 
 export default function ProductDetailClient({ product, relatedProducts }: ProductDetailClientProps) {
-  console.log("relatedProducts",relatedProducts)
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -55,11 +55,11 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
 
   const { user } = useAuthStore();
   const { addItem: addToCart } = useCartStore();
-  
+
   const router = useRouter();
 
-  const averageRating = product.reviews.length > 0 
-    ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length 
+  const averageRating = product.reviews.length > 0
+    ? product.reviews.reduce((sum, review) => sum + review.rating, 0) / product.reviews.length
     : 0;
 
   const handleAddToCart = () => {
@@ -98,7 +98,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) {
       toast.error('Please login to write a review');
       return;
@@ -159,16 +159,15 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                 className="w-full h-full object-cover"
               />
             </div>
-            
+
             {product.images.length > 1 && (
               <div className="grid grid-cols-4 gap-4">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 ${
-                      selectedImage === index ? 'border-black' : 'border-transparent'
-                    }`}
+                    className={`aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 ${selectedImage === index ? 'border-black' : 'border-transparent'
+                      }`}
                   >
                     <Image
                       src={image}
@@ -192,9 +191,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-5 h-5 ${
-                        i < Math.floor(averageRating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                      }`}
+                      className={`w-5 h-5 ${i < Math.floor(averageRating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                        }`}
                     />
                   ))}
                   <span className="ml-2 text-sm text-gray-600">
@@ -217,11 +215,10 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`py-2 px-4 text-sm font-medium rounded-md border ${
-                        selectedSize === size
+                      className={`py-2 px-4 text-sm font-medium rounded-md border ${selectedSize === size
                           ? 'border-black bg-black text-white'
                           : 'border-gray-300 bg-white text-gray-900 hover:border-gray-400'
-                      }`}
+                        }`}
                     >
                       {size}
                     </button>
@@ -239,9 +236,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`w-8 h-8 rounded-full border-2 ${
-                        selectedColor === color ? 'border-gray-900' : 'border-gray-300'
-                      }`}
+                      className={`w-8 h-8 rounded-full border-2 ${selectedColor === color ? 'border-gray-900' : 'border-gray-300'
+                        }`}
                       style={{ backgroundColor: color.toLowerCase() }}
                       title={color}
                     />
@@ -292,15 +288,14 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                   Buy Now
                 </button>
               </div>
-              
+
               <div className="flex space-x-4">
                 <button
                   onClick={() => setIsWishlisted(!isWishlisted)}
-                  className={`flex-1 py-3 px-6 rounded-md border transition-colors flex items-center justify-center space-x-2 ${
-                    isWishlisted
+                  className={`flex-1 py-3 px-6 rounded-md border transition-colors flex items-center justify-center space-x-2 ${isWishlisted
                       ? 'border-red-500 text-red-500 bg-red-50'
                       : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                  }`}
+                    }`}
                 >
                   <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
                   <span>{isWishlisted ? 'Wishlisted' : 'Add to Wishlist'}</span>
@@ -356,9 +351,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                       key={star}
                       type="button"
                       onClick={() => setReviewRating(star)}
-                      className={`w-8 h-8 ${
-                        star <= reviewRating ? 'text-yellow-400' : 'text-gray-300'
-                      }`}
+                      className={`w-8 h-8 ${star <= reviewRating ? 'text-yellow-400' : 'text-gray-300'
+                        }`}
                     >
                       <Star className="w-full h-full fill-current" />
                     </button>
@@ -405,9 +399,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                       {[...Array(5)].map((_, i) => (
                         <Star
                           key={i}
-                          className={`w-4 h-4 ${
-                            i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-                          }`}
+                          className={`w-4 h-4 ${i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                            }`}
                         />
                       ))}
                     </div>
@@ -430,7 +423,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
               {relatedProducts.map((relatedProduct) => (
                 <Link
                   key={relatedProduct.id}
-                  href={`/products/${relatedProduct.id}`}
+                  href={`/product/${relatedProduct.slug}`}
                   className="group"
                 >
                   <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-4">

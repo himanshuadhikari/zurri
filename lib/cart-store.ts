@@ -21,7 +21,6 @@ interface CartStore {
   clearCart: () => void;
   getTotalPrice: () => number;
   getTotalItems: () => number;
-  getUserInfo: () => {};
 }
 
 export const useCartStore = create<CartStore>()(
@@ -82,12 +81,7 @@ export const useCartStore = create<CartStore>()(
       getTotalItems: () => {
         return get().items.reduce((total, item) => total + item.quantity, 0);
       },
-
-
-      getUserInfo: () => {
-        const user = JSON.parse(window?.localStorage?.user) || null;
-        return user;
-      },
+     
     }),
     {
       name: 'cart-storage',

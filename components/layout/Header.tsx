@@ -3,14 +3,15 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { ShoppingBagIcon, UserIcon, Bars3Icon, XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '@/lib/cart-store';
+import { useAuthStore } from '@/lib/auth-store';
+
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const totalItems = useCartStore((state) => state.getTotalItems());
-//   const {getUserInfo} = useCartStore();
 
-
-// console.log("header called",getUserInfo())
+  const { getUser } = useAuthStore();
+  const user = getUser();
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Men', href: '/products/men' },
@@ -19,6 +20,7 @@ export default function Header() {
     { name: 'All Products', href: '/products' },
   ];
 
+  const userIconUrl = user?.id ? "/admin" : "/login";
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,10 +57,11 @@ export default function Header() {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-4">
-            <Link href="/login" className="text-gray-700 hover:text-gray-900 transition-colors duration-200">
+            <Link href={userIconUrl} className="text-gray-700 hover:text-gray-900 transition-colors duration-200">
               <UserIcon className="h-6 w-6" />
             </Link>
-            
+
+
             <Link href="/cart" className="relative text-gray-700 hover:text-gray-900 transition-colors duration-200">
               <ShoppingBagIcon className="h-6 w-6" />
               {totalItems > 0 && (

@@ -5,35 +5,31 @@ import { useRouter } from 'next/navigation';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 
+import { useAuthStore } from '@/lib/auth-store';
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const {login} = useAuthStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
 
-      const data = await response.json();
-
-      if (data.success) {
-        localStorage.setItem('token', data.data.token);
-        localStorage.setItem('user', JSON.stringify(data.data.user));
+      const response = await login(email, password);
+      
+      if (response) {
+        // localStorage.setItem('token', data.data.token);
+        // localStorage.setItem('user', JSON.stringify(data.data.user));
         toast.success('Login successful!');
         router.push('/');
       } else {
-        toast.error(data.error || 'Login failed');
+        toast.error('Login failed');
       }
     } catch (error) {
       toast.error('An error occurred. Please try again.');

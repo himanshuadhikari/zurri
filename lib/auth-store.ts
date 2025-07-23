@@ -1,12 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-}
+import { User } from '@/types';
 
 interface AuthState {
   user: User | null;
@@ -17,6 +11,7 @@ interface AuthState {
   checkAuth: () => Promise<void>;
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
+  getUser:() => User | null;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -24,7 +19,9 @@ export const useAuthStore = create<AuthState>()(
     (set, get) => ({
       user: null,
       loading: true,
-
+      getUser: () => {
+        return get()?.user;
+      },
       setUser: (user) => set({ user }),
       setLoading: (loading) => set({ loading }),
 
@@ -54,7 +51,7 @@ export const useAuthStore = create<AuthState>()(
 
           if (response.ok) {
             const userData = await response.json();
-            set({ user: userData.user });
+            set({ user: userData?.data?.user });
             return true;
           }
           return false;

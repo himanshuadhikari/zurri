@@ -1,20 +1,21 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { User } from '@/types';
+import { useAuthStore } from '@/lib/auth-store';
 
 export function useAdminAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { getUser } = useAuthStore();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
+    const userData = getUser();
 
-    if (token && userData) {
-      const parsedUser = JSON.parse(userData);
-      if (parsedUser.role === 'ADMIN') {
-        setUser(parsedUser);
-      }
+    if (userData && userData?.role === 'ADMIN') {
+
+
+      setUser(userData);
+
     }
     setLoading(false);
   }, []);
