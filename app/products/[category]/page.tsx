@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import ProductsClient from '@/components/ui/ProductsClient';
+import { parseStringObject } from '@/app/helper/productHelper';
 
 async function getCategoryProducts(categorySlug: string, searchParams: any) {
   const category = await prisma.category.findUnique({
@@ -23,7 +24,7 @@ async function getCategoryProducts(categorySlug: string, searchParams: any) {
   const skip = (parseInt(page) - 1) * parseInt(limit);
   
   const where: any = {
-    isActive: true,
+    active: true,
     categoryId: category.id
   };
 
@@ -82,7 +83,7 @@ async function getCategoryProducts(categorySlug: string, searchParams: any) {
           _count: {
             select: {
               products: {
-                where: { isActive: true }
+                where: { active: true }
               }
             }
           }
@@ -91,7 +92,7 @@ async function getCategoryProducts(categorySlug: string, searchParams: any) {
     ]);
 
     const productsWithRatings = products.map(product => ({
-      ...product,
+      ...parseStringObject(product),
       sizes: product.sizes as string[],
       colors: product.colors as string[],
       images: product.images as string[],
