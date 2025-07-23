@@ -30,6 +30,7 @@ export interface Product {
   featured: boolean;
   active: boolean;
   category: Category;
+  // categoryId: String;
 }
 
 export interface Address {

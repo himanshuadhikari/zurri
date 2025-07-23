@@ -38,7 +38,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     setIsWishlisted(!isWishlisted);
     toast.success(isWishlisted ? 'Removed from wishlist' : 'Added to wishlist');
   };
-console.log(product)
+
   return (
     <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
       <Link href={`/product/${product.slug}`}>

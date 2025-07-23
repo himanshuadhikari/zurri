@@ -14,7 +14,6 @@ export async function middleware(request: NextRequest) {
     }
 
     const decoded =await verifyJWT(token);
-    console.log("request headers", decoded)
 
     if (!decoded || decoded.role !== 'ADMIN') {
       return NextResponse.redirect(new URL('/login?error=unauthorized', request.url));
