@@ -2,7 +2,7 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 import ProductDetailClient from '@/components/ui/ProductDetailClient';
-import { Product } from '@/types';
+import { parseStringObject } from '@/app/helper/productHelper';
 
 
 
@@ -63,12 +63,6 @@ async function getProduct(id: string) {
     }
 }
 
-function parseStringObject(product: Product) {
-    product.images = JSON.parse(product.images || "[]");
-    product.sizes = JSON.parse(product.sizes || "[]");
-    product.colors = JSON.parse(product.colors || "[]");
-
-}
 
 async function getRelatedProducts(categoryId: string, currentProductId: string) {
     try {
