@@ -6,8 +6,8 @@ import {
   UsersIcon, 
   ClipboardDocumentListIcon,
   CurrencyDollarIcon,
-  TrendingUpIcon,
-  TrendingDownIcon
+  ArrowTrendingDownIcon,
+  ArrowTrendingUpIcon
 } from '@heroicons/react/24/outline';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
@@ -114,9 +114,9 @@ export default function AdminDashboard() {
                           item.changeType === 'increase' ? 'text-green-600' : 'text-red-600'
                         }`}>
                           {item.changeType === 'increase' ? (
-                            <TrendingUpIcon className="self-center flex-shrink-0 h-4 w-4 text-green-500" />
+                            <ArrowTrendingUpIcon className="self-center flex-shrink-0 h-4 w-4 text-green-500" />
                           ) : (
-                            <TrendingDownIcon className="self-center flex-shrink-0 h-4 w-4 text-red-500" />
+                            <ArrowTrendingDownIcon className="self-center flex-shrink-0 h-4 w-4 text-red-500" />
                           )}
                           <span className="ml-1">{item.change}</span>
                         </div>

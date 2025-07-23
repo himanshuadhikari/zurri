@@ -7,7 +7,10 @@ import { useCartStore } from '@/lib/cart-store';
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const totalItems = useCartStore((state) => state.getTotalItems());
+  const {getUserInfo} = useCartStore();
 
+
+console.log("header called",getUserInfo())
   const navigation = [
     { name: 'Home', href: '/' },
     { name: 'Men', href: '/products/men' },

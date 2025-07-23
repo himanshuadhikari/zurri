@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate JWT token
-    const token = signJWT({ userId: user.id, email: user.email });
+    const token = signJWT({ userId: user.id, email: user.email,role: user.role });
 
     const userResponse = {
       id: user.id,
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
       role: user.role
     };
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: {
         user: userResponse,
@@ -58,6 +58,15 @@ export async function POST(request: NextRequest) {
       },
       message: 'Login successful'
     });
+
+    response.cookies.set('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 60 * 60 * 24, // 1 day
+      sameSite: 'lax',
+    });
+    return response
 
   } catch (error) {
     console.error('Login error:', error);
