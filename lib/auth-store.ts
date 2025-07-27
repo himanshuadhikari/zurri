@@ -11,7 +11,7 @@ interface AuthState {
   checkAuth: () => Promise<void>;
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
-  getUser:() => User | null;
+  getUser: () => User | null;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -88,6 +88,23 @@ export const useAuthStore = create<AuthState>()(
           console.error('Logout failed:', error);
         } finally {
           set({ user: null });
+        }
+      },
+
+      resetPassword: async (email: string) => {
+        try {
+          // const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          //   redirectTo: `${window.location.origin}/reset-password`,
+          // });
+          //todo:: add code for logout
+          console.log("resetPassword called with emai =======", email)
+
+          // if (error) {
+          //   throw new Error(error.message);
+          // }
+        } catch (error) {
+          console.error('Password reset error:', error);
+          throw error;
         }
       },
     }),

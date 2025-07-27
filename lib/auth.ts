@@ -9,7 +9,10 @@ export async function hashPassword(password: string): Promise<string> {
 }
 
 export async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
-  return bcrypt.compare(password, hashedPassword);
+  console.log(password);
+  console.log(hashedPassword);
+
+  return await bcrypt.compare(password, hashedPassword);
 }
 
 export function signJWT(payload: any): string {

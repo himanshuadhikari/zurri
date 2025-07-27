@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { ProductFormData, validateProductForm, ValidationError } from '@/lib/validations/product';
-import { createProduct, getCategories } from '@/lib/api/products';
+import { createProduct, editProduct, getCategories } from '@/lib/api/products';
 import BasicInfoFields from './forms/BasicInfoFields';
 import ImageFields from './forms/ImageFields';
 import AttributeFields from './forms/AttributeFields';
@@ -27,11 +27,11 @@ const initialFormData: ProductFormData = {
     active: true,
 };
 
-export default function CreateProductForm() {
+export default function CreateProductForm({ product = null }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [categoriesLoading, setCategoriesLoading] = useState(true);
-    const [formData, setFormData] = useState<ProductFormData>(initialFormData);
+    const [formData, setFormData] = useState<ProductFormData>(product || initialFormData);
     const [errors, setErrors] = useState<ValidationError[]>([]);
     const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([]);
 
@@ -86,19 +86,19 @@ export default function CreateProductForm() {
         }
 
         setLoading(true);
-
+        
         try {
-            const result = await createProduct(formData);
+            const result =  formData.id ? await editProduct(formData) : await createProduct(formData);
 
-            if (!result.success) {
-                throw new Error(result.error || 'Failed to create product');
+            if (!result?.success) {
+                throw new Error(result?.error || 'Failed to create product');
             }
 
-            toast.success('Product created successfully!');
+            toast.success(`Product ${formData.id ? "updated" : "created"}  successfully!`);
             router.push('/admin/products');
         } catch (error) {
             console.error('Error creating product:', error);
-            toast.error(error instanceof Error ? error.message : 'Failed to create product');
+            toast.error(error instanceof Error ? error.message : `Failed to  ${formData.id ? "updated" : "created"}  product!`);
         } finally {
             setLoading(false);
         }

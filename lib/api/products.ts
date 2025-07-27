@@ -58,6 +58,37 @@ export const createProduct = async (productData: ProductFormData): Promise<ApiRe
   }
 };
 
+
+export const editProduct = async (productData: ProductFormData): Promise<ApiResponse<Product>> => {
+  try {
+    const response = await fetch(`/api/admin/products/${productData?.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...productData,
+        images: productData.images.filter(img => img.trim()),
+      }),
+    });
+
+    const result = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(result.error || `HTTP error! status: ${response.status}`);
+    }
+
+    return result;
+  } catch (error) {
+    console.error('Error editing product:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to edit product'
+    };
+  }
+};
+
+
 export const getCategories = async (): Promise<ApiResponse<Array<{ id: string; name: string }>>> => {
   try {
     const response = await fetch('/api/categories');

@@ -1,15 +1,19 @@
 "use client";
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ShoppingBagIcon, UserIcon, Bars3Icon, XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '@/lib/cart-store';
 import { useAuthStore } from '@/lib/auth-store';
 import UserHeader from './UserHeader';
+  import { usePathname } from 'next/navigation';
+
 
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const totalItems = useCartStore((state) => state.getTotalItems());
+  const [isAdminPanel, setAdminPanel] = useState(false);
+   const pathname = usePathname();
 
   const { getUser } = useAuthStore();
   const user = getUser();
@@ -20,14 +24,28 @@ export default function Header() {
     { name: 'Kids', href: '/products/kids' },
     { name: 'All Products', href: '/products' },
   ];
-  console.log("user>>>>>>>>>>",user)
+
+
+  useEffect(() => {
+    if (pathname?.startsWith("/admin")) {
+      setAdminPanel(true);
+    } else {
+      setAdminPanel(false);
+    }
+  },[pathname])
+
+  if (isAdminPanel) {
+    return null;
+  }
+
+
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <h1 className="text-2xl font-bold text-gray-900">CLOTHIFY</h1>
+            <h1 className="text-2xl font-bold text-gray-900">ZURRI</h1>
           </Link>
 
           {/* Desktop Navigation */}
@@ -60,7 +78,7 @@ export default function Header() {
             {/* <Link href={userIconUrl} className="text-gray-700 hover:text-gray-900 transition-colors duration-200">
               <UserIcon className="h-6 w-6" />
             </Link> */}
-            <UserHeader user={user}/>
+            <UserHeader user={user} />
 
 
             <Link href="/cart" className="relative text-gray-700 hover:text-gray-900 transition-colors duration-200">

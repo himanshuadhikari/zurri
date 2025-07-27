@@ -45,7 +45,7 @@ interface ProfilePageProps {
 }
 
 export default function ProfilePage({ user }: ProfilePageProps) {
-  const fullName = `${user.firstName} ${user.lastName}`;
+  const fullName = `${user?.firstName} ${user?.lastName}`;
   const memberSince = new Date(user.createdAt).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long'

@@ -27,6 +27,8 @@ const navigation = [
   { name: 'Users', href: '/admin/users', icon: UsersIcon },
   { name: 'Analytics', href: '/admin/analytics', icon: ChartBarIcon },
   { name: 'Settings', href: '/admin/settings', icon: Cog6ToothIcon },
+  { name: 'Back To Portal', href: '/', icon: Cog6ToothIcon },
+
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {

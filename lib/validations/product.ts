@@ -1,4 +1,5 @@
 export interface ProductFormData {
+  id?: string;
   name: string;
   slug: string;
   description: string;
