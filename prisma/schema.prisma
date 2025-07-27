@@ -20,7 +20,18 @@ model User {
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
+  date_of_birth  String? // or use DateTime? if you're storing dates
+  gender       String?
+  bio          String?
+  profileImage String?
+  street       String?
+  city         String?
+  state        String?
+  zipCode      String?
+  country      String?
+  newsletter   Boolean
+  notifications Boolean
+  marketing    Boolean
   // Relations
   orders    Order[]
   addresses Address[]

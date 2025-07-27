@@ -86,5 +86,8 @@
   },
   "devDependencies": {
     "tsx": "^4.20.3"
+  },
+  "prisma": {
+    "schema": "./prisma/schema.prisma"
   }
 }

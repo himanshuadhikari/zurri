@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import ProductsClient from '@/components/ui/ProductsClient';
 import { prisma } from '@/lib/prisma';
 import { parseStringObject } from '../helper/productHelper';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 async function getProducts(searchParams: any) {
   const {
@@ -125,7 +126,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: any
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingSpinner size="lg" />}>
         <ProductsClient {...data} searchParams={searchParams} />
       </Suspense>
     </div>
