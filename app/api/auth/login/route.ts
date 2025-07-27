@@ -41,19 +41,12 @@ export async function POST(request: NextRequest) {
     // Generate JWT token
     const token = signJWT({ userId: user.id, email: user.email,role: user.role });
 
-    const userResponse = {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phone: user.phone,
-      role: user.role
-    };
+    
 
     const response = NextResponse.json({
       success: true,
       data: {
-        user: userResponse,
+        user: user,
         token
       },
       message: 'Login successful'

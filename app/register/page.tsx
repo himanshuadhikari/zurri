@@ -59,10 +59,8 @@ export default function RegisterPage() {
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem('token', data.data.token);
-        localStorage.setItem('user', JSON.stringify(data.data.user));
         toast.success('Account created successfully!');
-        router.push('/');
+        router.push('/login');
       } else {
         toast.error(data.error || 'Registration failed');
       }

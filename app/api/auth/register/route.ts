@@ -5,7 +5,7 @@ import { hashPassword, signJWT } from '@/lib/auth';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, firstName, lastName, phone } = body;
+    const { email, password, firstName, lastName, phone, newsletter = false, notifications = false, marketing = false } = body;
 
     if (!email || !password || !firstName || !lastName) {
       return NextResponse.json(
@@ -36,7 +36,10 @@ export async function POST(request: NextRequest) {
         password: hashedPassword,
         firstName,
         lastName,
-        phone
+        phone,
+        newsletter,
+        notifications,
+        marketing
       }
     });
 
@@ -52,7 +55,7 @@ export async function POST(request: NextRequest) {
       role: user.role
     };
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: {
         user: userResponse,
@@ -60,6 +63,16 @@ export async function POST(request: NextRequest) {
       },
       message: 'User created successfully'
     });
+
+
+    response.cookies.set('auth_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      path: '/',
+      maxAge: 60 * 60 * 24, // 1 day
+      sameSite: 'lax',
+    });
+    return response
 
   } catch (error) {
     console.error('Registration error:', error);
