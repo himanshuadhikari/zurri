@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ShoppingBagIcon, UserIcon, Bars3Icon, XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '@/lib/cart-store';
 import { useAuthStore } from '@/lib/auth-store';
+import UserHeader from './UserHeader';
 
 
 export default function Header() {
@@ -57,9 +58,10 @@ export default function Header() {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-4">
-            <Link href={userIconUrl} className="text-gray-700 hover:text-gray-900 transition-colors duration-200">
+            {/* <Link href={userIconUrl} className="text-gray-700 hover:text-gray-900 transition-colors duration-200">
               <UserIcon className="h-6 w-6" />
-            </Link>
+            </Link> */}
+            <UserHeader user={user}/>
 
 
             <Link href="/cart" className="relative text-gray-700 hover:text-gray-900 transition-colors duration-200">
