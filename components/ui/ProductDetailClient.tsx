@@ -12,7 +12,7 @@ import { useCartStore } from '@/lib/cart-store';
 import { toast } from 'react-hot-toast';
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
   description: string;
   price: number;
@@ -210,7 +210,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
             {product.sizes.length > 0 && (
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-3">Size</h3>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-8 gap-2">
                   {product.sizes.map((size) => (
                     <button
                       key={size}

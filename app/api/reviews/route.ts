@@ -1,16 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyToken } from '@/lib/auth';
+import { getTokenFromCookie } from '@/lib/auth';
+import { verifyJWT } from '@/lib/auth-edge';
 
 export async function POST(request: NextRequest) {
   try {
-    const token = request.cookies.get('token')?.value;
+    const token = getTokenFromCookie(request);
     
     if (!token) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const decoded = verifyToken(token);
+      const decoded =await verifyJWT(token);
+    
     if (!decoded) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
@@ -24,7 +26,7 @@ export async function POST(request: NextRequest) {
     // Check if user already reviewed this product
     const existingReview = await prisma.review.findFirst({
       where: {
-        productId: parseInt(productId),
+        productId: productId,
         userId: decoded.userId
       }
     });
@@ -35,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     const review = await prisma.review.create({
       data: {
-        productId: parseInt(productId),
+        productId: productId,
         userId: decoded.userId,
         rating,
         comment: comment || ''
@@ -43,7 +45,7 @@ export async function POST(request: NextRequest) {
       include: {
         user: {
           select: {
-            name: true,
+            firstName: true,
             email: true
           }
         }

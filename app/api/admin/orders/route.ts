@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { getTokenFromRequest, getUserFromToken } from '@/lib/auth';
+import { getTokenFromCookie, getUserFromToken } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
-    const token = getTokenFromRequest(request);
+    const token = getTokenFromCookie(request);
     if (!token) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },

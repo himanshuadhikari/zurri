@@ -115,7 +115,7 @@ export default function AdminProducts() {
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">Products</h1>
           <Link
-            href="/admin/products/new"
+            href="/admin/products/create"
             className="inline-flex items-center px-4 py-2 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition-colors"
           >
             <PlusIcon className="h-5 w-5 mr-2" />
