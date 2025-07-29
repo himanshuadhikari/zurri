@@ -46,7 +46,7 @@ interface ProfilePageProps {
 
 export default function ProfilePage({ user }: ProfilePageProps) {
   const fullName = `${user?.firstName} ${user?.lastName}`;
-  const memberSince = new Date(user.createdAt).toLocaleDateString('en-US', {
+  const memberSince = new Date(user?.createdAt).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long'
   });
@@ -68,7 +68,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
   };
 
   const getAddress = () => {
-    const parts = [user.street, user.city, user.state, user.zipCode, user.country].filter(Boolean);
+    const parts = [user?.street, user?.city, user?.state, user?.zipCode, user?.country].filter(Boolean);
     return parts.length > 0 ? parts.join(', ') : 'No address provided';
   };
 
@@ -80,9 +80,9 @@ export default function ProfilePage({ user }: ProfilePageProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-6">
               <div className="w-24 h-24 rounded-full overflow-hidden bg-white/20 border-4 border-white/30">
-                {user.profileImage ? (
+                {user?.profileImage ? (
                   <img
-                    src={user.profileImage}
+                    src={user?.profileImage}
                     alt={fullName}
                     className="w-full h-full object-cover"
                   />
@@ -94,7 +94,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
               </div>
               <div>
                 <h1 className="text-3xl font-bold mb-2">{fullName}</h1>
-                <p className="text-indigo-100 mb-1">{user.email}</p>
+                <p className="text-indigo-100 mb-1">{user?.email}</p>
                 <p className="text-indigo-200 text-sm">Member since {memberSince}</p>
               </div>
             </div>
@@ -124,35 +124,35 @@ export default function ProfilePage({ user }: ProfilePageProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">First Name</label>
-                  <p className="text-gray-900">{user.firstName}</p>
+                  <p className="text-gray-900">{user?.firstName}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Last Name</label>
-                  <p className="text-gray-900">{user.lastName}</p>
+                  <p className="text-gray-900">{user?.lastName}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Phone</label>
-                  <p className="text-gray-900">{user.phone || 'Not provided'}</p>
+                  <p className="text-gray-900">{user?.phone || 'Not provided'}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Date of Birth</label>
-                  <p className="text-gray-900">{formatDate(user.dateOfBirth)}</p>
+                  <p className="text-gray-900">{formatDate(user?.dateOfBirth)}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Gender</label>
-                  <p className="text-gray-900">{formatGender(user.gender)}</p>
+                  <p className="text-gray-900">{formatGender(user?.gender)}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Role</label>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                    {user.role}
+                    {user?.role}
                   </span>
                 </div>
               </div>
-              {user.bio && (
+              {user?.bio && (
                 <div className="mt-6">
                   <label className="block text-sm font-medium text-gray-500 mb-1">Bio</label>
-                  <p className="text-gray-900 leading-relaxed">{user.bio}</p>
+                  <p className="text-gray-900 leading-relaxed">{user?.bio}</p>
                 </div>
               )}
             </div>
@@ -190,7 +190,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
                     </div>
                   </div>
                   <div className="flex items-center">
-                    {user.newsletter ? (
+                    {user?.newsletter ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         <Check className="w-3 h-3 mr-1" />
                         Enabled
@@ -213,7 +213,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
                     </div>
                   </div>
                   <div className="flex items-center">
-                    {user.notifications ? (
+                    {user?.notifications ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         <Check className="w-3 h-3 mr-1" />
                         Enabled
@@ -236,7 +236,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
                     </div>
                   </div>
                   <div className="flex items-center">
-                    {user.marketing ? (
+                    {user?.marketing ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         <Check className="w-3 h-3 mr-1" />
                         Enabled
@@ -310,7 +310,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Last Updated</span>
                 <span className="font-medium text-gray-900">
-                  {new Date(user.updatedAt).toLocaleDateString()}
+                  {new Date(user?.updatedAt).toLocaleDateString()}
                 </span>
               </div>
             </div>

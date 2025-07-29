@@ -177,7 +177,7 @@ export default function AdminOrders() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {JSON.parse(order.shippingAddress).firstName} {JSON.parse(order.shippingAddress).lastName}
+                    {order?.shippingAddress?.firstName} {order?.shippingAddress?.lastName}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {new Date(order.createdAt).toLocaleDateString()}

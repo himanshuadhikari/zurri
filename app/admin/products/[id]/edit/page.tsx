@@ -1,6 +1,6 @@
 
 
-import { Metadata } from 'next';
+// import { Metadata } from 'next';
 import CreateProductForm from '@/components/admin/CreateProductForm';
 import { prisma } from '@/lib/prisma';
 
