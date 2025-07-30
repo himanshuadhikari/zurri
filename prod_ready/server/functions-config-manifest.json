@@ -1,7 +1,0 @@
-{
-  "version": 1,
-  "functions": {
-    "/admin/products/create": {},
-    "/admin/products/[id]/edit": {}
-  }
-}
