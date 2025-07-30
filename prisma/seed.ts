@@ -163,14 +163,17 @@ async function main() {
   console.log('Creating admin user...');
   const hashedPassword = await hashPassword('admin123');
   await prisma.user.upsert({
-    where: { email: 'admin@clothify.com' },
+    where: { email: 'admin@zurri.com' },
     update: {},
     create: {
-      email: 'admin@clothify.com',
+      email: 'admin@zurri.com',
       password: hashedPassword,
       firstName: 'Admin',
       lastName: 'User',
-      role: 'ADMIN'
+      role: 'ADMIN',
+      newsletter: true,
+      notifications: true,
+      marketing: true
     }
   });
 
@@ -178,15 +181,38 @@ async function main() {
   console.log('Creating test user...');
   const testUserPassword = await hashPassword('test123');
   await prisma.user.upsert({
-    where: { email: 'test@clothify.com' },
+    where: { email: 'shivani@zurri.com' },
     update: {},
     create: {
-      email: 'test@clothify.com',
+      email: 'shivani@zurri.com',
       password: testUserPassword,
       firstName: 'Test',
       lastName: 'User',
       phone: '+1234567890',
-      role: 'USER'
+      role: 'USER',
+      newsletter: true,
+      notifications: true,
+      marketing: true
+    }
+  });
+
+
+  // Create a regular test user
+  console.log('Creating second test user...');
+  const testUserPassword1 = await hashPassword('test123');
+  await prisma.user.upsert({
+    where: { email: 'kiran@zurri.com' },
+    update: {},
+    create: {
+      email: 'kiran@zurri.com',
+      password: testUserPassword1,
+      firstName: 'Test',
+      lastName: 'User',
+      phone: '+1234567890',
+      role: 'USER',
+      newsletter: true,
+      notifications: true,
+      marketing: true
     }
   });
 
