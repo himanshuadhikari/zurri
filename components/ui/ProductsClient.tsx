@@ -236,7 +236,7 @@ export default function ProductsClient({
                     <label className="block text-xs text-gray-600 mb-1">Min Price</label>
                     <input
                       type="number"
-                      placeholder="$0"
+                      placeholder={defaultContants.RUPEE_SIGN+"1"}
                       value={filters.minPrice}
                       onChange={(e) => handleFilterChange('minPrice', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
@@ -246,7 +246,7 @@ export default function ProductsClient({
                     <label className="block text-xs text-gray-600 mb-1">Max Price</label>
                     <input
                       type="number"
-                      placeholder="$1000"
+                      placeholder={defaultContants.RUPEE_SIGN+"1000"}
                       value={filters.maxPrice}
                       onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
@@ -260,10 +260,10 @@ export default function ProductsClient({
                 <h4 className="font-medium text-gray-900 mb-3">Quick Filters</h4>
                 <div className="space-y-2">
                   {[
-                    { label: 'Under $50', min: '', max: '50' },
-                    { label: '$50 - $100', min: '50', max: '100' },
-                    { label: '$100 - $200', min: '100', max: '200' },
-                    { label: 'Over $200', min: '200', max: '' }
+                    { label: 'Under ' + defaultContants.RUPEE_SIGN + '50', min: '', max: '50' },
+                    { label: defaultContants.RUPEE_SIGN + '50 - ' + defaultContants.RUPEE_SIGN + '100', min: '50', max: '100' },
+                    { label: defaultContants.RUPEE_SIGN + '100 - ' + defaultContants.RUPEE_SIGN + '200', min: '100', max: '200' },
+                    { label: 'Over ' + defaultContants.RUPEE_SIGN + '200', min: '200', max: '' }
                   ].map((range) => (
                     <button
                       key={range.label}
