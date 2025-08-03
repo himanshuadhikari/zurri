@@ -14,6 +14,7 @@ import {
     ArrowLeft,
     Check
 } from 'lucide-react';
+import { useCartStore } from '@/lib/cart-store';
 
 interface CartItem {
     id: string;
@@ -45,9 +46,11 @@ interface CustomerInfo {
 
 export default function CheckoutPage() {
     const router = useRouter();
+    const { items, updateQuantity, removeItem, getTotalPrice, clearCart } = useCartStore();
+    console.log(items)
     const [currentStep, setCurrentStep] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const [cartItems, setCartItems] = useState<CartItem[]>(items);
 
     // Form states
     const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({

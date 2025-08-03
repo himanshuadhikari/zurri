@@ -37,8 +37,8 @@ export const useCartStore = create<CartStore>()(
             return {
               items: state.items.map((item) =>
                 item.id === newItem.id && item.size === newItem.size && item.color === newItem.color
-                  ? { ...item, quantity: item.quantity + 1 }
-                  : item
+                  ? { ...item, quantity: item.quantity + 1, productId: item?.id }
+                  : {...item, productId: item?.id}
               ),
             };
           }
