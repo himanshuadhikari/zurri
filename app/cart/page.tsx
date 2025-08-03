@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { TrashIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '@/lib/cart-store';
 import toast from 'react-hot-toast';
+import defaultContants from '@/constants';
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, getTotalPrice, clearCart } = useCartStore();
@@ -84,7 +85,7 @@ export default function CartPage() {
                       {item.size && <span>Size: {item.size}</span>}
                       {item.color && <span>Color: {item.color}</span>}
                     </div>
-                    <p className="mt-1 text-lg font-medium text-gray-900">${item.price}</p>
+                    <p className="mt-1 text-lg font-medium text-gray-900">{defaultContants.RUPEE_SIGN}{item.price}</p>
                   </div>
                   
                   <div className="flex items-center space-x-2">

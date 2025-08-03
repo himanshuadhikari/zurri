@@ -10,6 +10,7 @@ import { Star, Heart, ShoppingCart, Minus, Plus, Share2, Truck, Shield, RotateCc
 import { useAuthStore } from '@/lib/auth-store';
 import { useCartStore } from '@/lib/cart-store';
 import { toast } from 'react-hot-toast';
+import defaultContants from '@/constants';
 
 interface Product {
   id: string;
@@ -203,7 +204,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                 </div>
                 <span className="text-sm text-gray-600">SKU: CLO-{product.id}</span>
               </div>
-              <p className="text-3xl font-bold text-gray-900">${product.price}</p>
+              <p className="text-3xl font-bold text-gray-900">{defaultContants.RUPEE_SIGN}{product.price}</p>
             </div>
 
             <p className="text-gray-600 leading-relaxed">{product.description}</p>
@@ -438,7 +439,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                     />
                   </div>
                   <h3 className="font-medium text-gray-900 mb-1">{relatedProduct.name}</h3>
-                  <p className="text-gray-600">${relatedProduct.price}</p>
+                  <p className="text-gray-600">{defaultContants.RUPEE_SIGN}{relatedProduct.price}</p>
                 </Link>
               ))}
             </div>

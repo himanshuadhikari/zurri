@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ProductCard from '@/components/ui/ProductCard';
 import { Search, Filter, Grid, List, ChevronDown, Star, X } from 'lucide-react';
+import defaultContants from '@/constants';
 
 interface Product {
   id: number;
@@ -341,7 +342,7 @@ export default function ProductsClient({
                               ({product.reviewCount})
                             </span>
                           </div>
-                          <p className="text-xl font-bold text-gray-900">${product.price}</p>
+                          <p className="text-xl font-bold text-gray-900">{defaultContants.RUPEE_SIGN}{product.price}</p>
                         </div>
                       </div>
                     ))}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDownIcon, ChevronUpIcon, TruckIcon, CheckCircleIcon, ClockIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import defaultContants from '@/constants';
 
 interface OrderItem {
     id: string;
@@ -300,7 +301,7 @@ const OrdersPage: React.FC = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="text-sm font-medium text-gray-900">
-                                                                ${item.price.toFixed(2)}
+                                                                {defaultContants.RUPEE_SIGN}{item.price.toFixed(2)}
                                                             </div>
                                                         </div>
                                                     ))}

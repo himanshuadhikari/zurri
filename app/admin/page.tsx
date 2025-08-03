@@ -10,6 +10,7 @@ import {
   ArrowTrendingUpIcon
 } from '@heroicons/react/24/outline';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import defaultContants from '@/constants';
 
 interface DashboardStats {
   totalProducts: number;
@@ -183,7 +184,7 @@ export default function AdminDashboard() {
                           {product.name}
                         </p>
                         <p className="text-sm text-gray-500">
-                          ${product.price}
+                         {defaultContants.RUPEE_SIGN}{product.price}
                         </p>
                       </div>
                     </div>

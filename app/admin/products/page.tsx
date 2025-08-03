@@ -13,6 +13,7 @@ import {
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { Product } from '@/types';
 import toast from 'react-hot-toast';
+import defaultContants from '@/constants';
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -187,7 +188,7 @@ export default function AdminProducts() {
                     {product.category.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${product.price}
+                    {defaultContants.RUPEE_SIGN}{product.price}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {product.stock}

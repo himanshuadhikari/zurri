@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Product } from '@/types';
 import { useCartStore } from '@/lib/cart-store';
 import toast from 'react-hot-toast';
+import defaultContants from '@/constants';
 
 interface ProductCardProps {
   product: Product;
@@ -107,11 +108,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <span className="text-lg font-bold text-gray-900">
-                ${product.price}
+                {defaultContants.RUPEE_SIGN}{product.price}
               </span>
               {product.comparePrice && product.comparePrice > product.price && (
                 <span className="text-sm text-gray-500 line-through">
-                  ${product.comparePrice}
+                  {defaultContants.RUPEE_SIGN}{product.comparePrice}
                 </span>
               )}
             </div>
