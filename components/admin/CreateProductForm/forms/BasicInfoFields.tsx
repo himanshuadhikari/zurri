@@ -1,5 +1,6 @@
 'use client';
 
+import defaultContants from '@/constants';
 import { ProductFormData, ValidationError, generateSlugFromName, generateSKUFromName } from '@/lib/validations/product';
 
 interface BasicInfoFieldsProps {
@@ -39,7 +40,7 @@ export default function BasicInfoFields({
       {/* Product Name */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Product Name *
+          Product Name <span className="text-[red]">*</span>
         </label>
         <input
           type="text"
@@ -60,7 +61,7 @@ export default function BasicInfoFields({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Slug *
+            Slug <span className="text-[red]">*</span>
           </label>
           <input
             type="text"
@@ -82,7 +83,7 @@ export default function BasicInfoFields({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            SKU *
+            SKU <span className="text-[red]">*</span>
           </label>
           <input
             type="text"
@@ -106,7 +107,7 @@ export default function BasicInfoFields({
       {/* Category */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Category *
+          Category <span className="text-[red]">*</span>
         </label>
         <select
           value={formData.categoryId}
@@ -130,7 +131,7 @@ export default function BasicInfoFields({
       {/* Description */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Description *
+          Description <span className="text-[red]">*</span>
         </label>
         <textarea
           value={formData.description}
@@ -158,7 +159,7 @@ export default function BasicInfoFields({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Price ($) *
+            ({defaultContants.RUPEE_SIGN}) Price <span className="text-[red]">*</span>
           </label>
           <input
             type="number"
@@ -182,7 +183,7 @@ export default function BasicInfoFields({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Compare Price ($)
+            ({defaultContants.RUPEE_SIGN}) Compare Price
           </label>
           <input
             type="number"
@@ -211,7 +212,7 @@ export default function BasicInfoFields({
       {/* Stock */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Stock Quantity *
+          Stock Quantity <span className="text-[red]">*</span>
         </label>
         <input
           type="number"
