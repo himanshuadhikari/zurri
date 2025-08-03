@@ -1,0 +1,20 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="#064e3b"/>
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Z Letter -->
+  <path d="M6 8h8v2.5L9.5 16H14v2.5H6V16l4.5-5.5H6V8z" fill="url(#goldGradient)" stroke="#f59e0b" stroke-width="0.5"/>
+  
+  <!-- R Letter -->
+  <path d="M18 8h5c1.5 0 2.5 1 2.5 2.5s-1 2.5-2.5 2.5h-2.5v5.5h-2.5V8zm2.5 2.5v2h2.5c0.5 0 0.5-2 0-2h-2.5z" fill="url(#goldGradient)" stroke="#f59e0b" stroke-width="0.5"/>
+  <path d="M23 13.5l2.5 5h-2.8l-2.2-5h2.5z" fill="url(#goldGradient)"/>
+  
+  <!-- Subtle shopping accent -->
+  <circle cx="26" cy="26" r="2" fill="#f59e0b" opacity="0.8"/>
+  <circle cx="26" cy="26" r="1" fill="#064e3b"/>
+</svg>

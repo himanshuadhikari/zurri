@@ -124,6 +124,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
         setReviewRating(5);
         router.refresh();
       } else {
+        const error = await response.json();
+        console.log(error);
         toast.error('Failed to submit review');
       }
     } catch (error) {
