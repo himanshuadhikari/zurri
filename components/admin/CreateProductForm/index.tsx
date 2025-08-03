@@ -10,6 +10,7 @@ import ImageFields from './forms/ImageFields';
 import AttributeFields from './forms/AttributeFields';
 import AdminLayout from '../AdminLayout';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import DetailsFields from './forms/DetailsFields';
 
 const initialFormData: ProductFormData = {
     name: '',
@@ -135,11 +136,12 @@ export default function CreateProductForm({ product = null }) {
             </AdminLayout>
         );
     }
-
     return (
         <AdminLayout>
             <div className="bg-white rounded-lg shadow-sm border p-6">
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form 
+                onSubmit={handleSubmit} 
+                className="space-y-8">
                     {/* Form Header */}
                     <div className="border-b pb-4">
                         <h2 className="text-lg font-semibold text-gray-900">Product Information</h2>
@@ -156,6 +158,15 @@ export default function CreateProductForm({ product = null }) {
                             setFormData={setFormData}
                             errors={errors}
                             categories={categories}
+                        />
+                    </div>
+
+                    <div>
+                        <h3 className="text-md font-medium text-gray-900 mb-4">Product Details</h3>
+                        <DetailsFields
+                            formData={formData}
+                            setFormData={setFormData}
+                            errors={errors}
                         />
                     </div>
 

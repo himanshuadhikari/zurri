@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Star, Heart, ShoppingCart, Minus, Plus, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
+import { Star, Heart, ShoppingCart, Minus, Plus, Share2, Truck, Shield, RotateCcw, Ruler, Zap, Crown, Palette, Lock, Bone, Target, Users, Shirt, Sparkles, Scissors, Waves } from 'lucide-react';
 // import { useAuth } from '@/contexts/AuthContext';
 // import { useCart } from '@/contexts/CartContext';
 import { useAuthStore } from '@/lib/auth-store';
@@ -21,7 +21,21 @@ interface Product {
   sizes: string[];
   colors: string[];
   stock: number;
-  slug: string,
+  slug: string;
+  details?: {
+    length?: string;
+    fit?: string;
+    neckline?: string;
+    style?: string;
+    closureType?: string;
+    boningType?: string;
+    waistReduction?: string;
+    sizingType?: string;
+    fabric?: string;
+    pattern?: string;
+    straps?: string;
+    hemline?: string;
+  };
   category: {
     id: number;
     name: string;
@@ -134,6 +148,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
     }
   };
 
+  // Helper function to render detail item with icon
+
   return (
     <div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -202,12 +218,10 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                     ({product.reviews.length} reviews)
                   </span>
                 </div>
-                <span className="text-sm text-gray-600">SKU: CLO-{product.id}</span>
+                {/* <span className="text-sm text-gray-600">SKU: CLO-{product.id}</span> */}
               </div>
               <p className="text-3xl font-bold text-gray-900">{defaultContants.RUPEE_SIGN}{product.price}</p>
             </div>
-
-            <p className="text-gray-600 leading-relaxed">{product.description}</p>
 
             {/* Size Selection */}
             {product.sizes.length > 0 && (
@@ -219,8 +233,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                       key={size}
                       onClick={() => setSelectedSize(size)}
                       className={`py-2 px-4 text-sm font-medium rounded-md border ${selectedSize === size
-                          ? 'border-black bg-black text-white'
-                          : 'border-gray-300 bg-white text-gray-900 hover:border-gray-400'
+                        ? 'border-black bg-black text-white'
+                        : 'border-gray-300 bg-white text-gray-900 hover:border-gray-400'
                         }`}
                     >
                       {size}
@@ -296,8 +310,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                 <button
                   onClick={() => setIsWishlisted(!isWishlisted)}
                   className={`flex-1 py-3 px-6 rounded-md border transition-colors flex items-center justify-center space-x-2 ${isWishlisted
-                      ? 'border-red-500 text-red-500 bg-red-50'
-                      : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                    ? 'border-red-500 text-red-500 bg-red-50'
+                    : 'border-gray-300 text-gray-700 hover:border-gray-400'
                     }`}
                 >
                   <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
@@ -309,7 +323,138 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
               </div>
             </div>
 
-            {/* Features */}
+            <p className="text-gray-600 leading-relaxed break-words">{product.description}</p>
+
+            {/* Product Details Section */}
+            {product.details && Object.values(product.details).some(value => value) && (
+              <div className="mt-12 border-t pt-8">
+                <h2 className="text-xl font-semibold text-gray-900 mb-6">Specifications</h2>
+
+                <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-sm">
+                  {product.details.fabric && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Shirt className="w-4 h-4" />
+                        Fabric
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.fabric}</div>
+                    </>
+                  )}
+
+                  {product.details.fit && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Zap className="w-4 h-4" />
+                        Fit
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.fit}</div>
+                    </>
+                  )}
+
+                  {product.details.length && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Ruler className="w-4 h-4" />
+                        Length
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.length}</div>
+                    </>
+                  )}
+
+                  {product.details.neckline && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Crown className="w-4 h-4" />
+                        Neckline
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.neckline}</div>
+                    </>
+                  )}
+
+                  {product.details.style && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Palette className="w-4 h-4" />
+                        Style
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.style}</div>
+                    </>
+                  )}
+
+                  {product.details.closureType && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Lock className="w-4 h-4" />
+                        Closure Type
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.closureType}</div>
+                    </>
+                  )}
+
+                  {product.details.boningType && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Bone className="w-4 h-4" />
+                        Boning Type
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.boningType}</div>
+                    </>
+                  )}
+
+                  {product.details.waistReduction && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Target className="w-4 h-4" />
+                        Waist Reduction
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.waistReduction}</div>
+                    </>
+                  )}
+
+                  {product.details.sizingType && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Users className="w-4 h-4" />
+                        Sizing Type
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.sizingType}</div>
+                    </>
+                  )}
+
+                  {product.details.pattern && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Sparkles className="w-4 h-4" />
+                        Pattern
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.pattern}</div>
+                    </>
+                  )}
+
+                  {product.details.straps && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Scissors className="w-4 h-4" />
+                        Straps
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.straps}</div>
+                    </>
+                  )}
+
+                  {product.details.hemline && (
+                    <>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <Waves className="w-4 h-4" />
+                        Hemline
+                      </div>
+                      <div className="text-gray-500 font-medium">{product.details.hemline}</div>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
+             {/* Features */}
             <div className="border-t pt-6 space-y-4">
               <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <Truck className="w-5 h-5" />
@@ -324,6 +469,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                 <span>2-year warranty</span>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -408,7 +554,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                       ))}
                     </div>
                   </div>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-gray-900">
                     {new Date(review.createdAt).toLocaleDateString()}
                   </span>
                 </div>

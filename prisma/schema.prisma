@@ -67,6 +67,7 @@ model Product {
   images       String   @db.Text // JSON array of image URLs
   sizes        String   @db.Text // JSON array of available sizes
   colors       String   @db.Text // JSON array of available colors
+  details      String?  @db.Text // JSON object of product details
   featured     Boolean  @default(false)
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())

@@ -24,7 +24,8 @@ export async function PUT(
             colors,
             stock,
             featured,
-            active
+            active,
+            details
         } = body;
 
         // Validate required fields
@@ -73,6 +74,7 @@ export async function PUT(
                 stock: parseInt(stock) || 0,
                 featured: Boolean(featured),
                 active: Boolean(active),
+                details: details ? JSON.stringify(details) : null,
             }
         });
 

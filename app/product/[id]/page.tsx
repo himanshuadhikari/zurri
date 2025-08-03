@@ -55,7 +55,8 @@ async function getProduct(id: string) {
             ...product,
             sizes: product.sizes as string[],
             colors: product.colors as string[],
-            images: product.images as string[]
+            images: product.images as string[],
+            details: product.details as string[]
         };
     } catch (error) {
         console.error('Error fetching product:', error);

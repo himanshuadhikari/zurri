@@ -1,3 +1,4 @@
+import { z } from 'zod';
 export interface ProductFormData {
   id?: string;
   name: string;
@@ -13,6 +14,20 @@ export interface ProductFormData {
   colors: string[];
   featured: boolean;
   active: boolean;
+  details?: {
+    length?: string;
+    fit?: string;
+    neckline?: string;
+    style?: string;
+    closureType?: string;
+    boningType?: string;
+    waistReduction?: string;
+    sizingType?: string;
+    fabric?: string;
+    pattern?: string;
+    straps?: string;
+    hemline?: string;
+  };
 }
 
 export interface ValidationError {
@@ -96,9 +111,9 @@ export const validateProductForm = (data: ProductFormData): ValidationError[] =>
       try {
         new URL(img);
       } catch {
-        errors.push({ 
-          field: 'images', 
-          message: `Image ${index + 1} is not a valid URL` 
+        errors.push({
+          field: 'images',
+          message: `Image ${index + 1} is not a valid URL`
         });
       }
     });

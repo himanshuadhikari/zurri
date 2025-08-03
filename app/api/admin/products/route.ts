@@ -4,7 +4,7 @@ import { getTokenFromCookie, getUserFromToken } from '@/lib/auth';
 
 export async function GET(request: NextRequest) {
   try {
-    
+
     const token = getTokenFromCookie(request);
     if (!token) {
       return NextResponse.json(
@@ -102,20 +102,21 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { 
-      name, 
-      slug, 
-      description, 
-      price, 
-      comparePrice, 
-      sku, 
-      categoryId, 
-      images, 
-      sizes, 
-      colors, 
-      stock, 
-      featured, 
-      active 
+    const {
+      name,
+      slug,
+      description,
+      price,
+      comparePrice,
+      sku,
+      categoryId,
+      images,
+      sizes,
+      colors,
+      stock,
+      featured,
+      active,
+      details
     } = body;
 
     // Validate required fields
@@ -163,6 +164,7 @@ export async function POST(request: NextRequest) {
         stock: parseInt(stock) || 0,
         featured: Boolean(featured),
         active: Boolean(active),
+        details: details ? JSON.stringify(details) : null,
       },
       include: {
         category: true,
