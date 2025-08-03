@@ -106,7 +106,7 @@ export default function CartPage() {
                   
                   <div className="text-right">
                     <p className="text-lg font-medium text-gray-900">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {defaultContants.RUPEE_SIGN}{(item.price * item.quantity).toFixed(2)}
                     </p>
                     <button
                       onClick={() => handleRemoveItem(item.id, item.size, item.color)}
@@ -128,22 +128,22 @@ export default function CartPage() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal ({items.length} items)</span>
-                  <span className="font-medium">${subtotal.toFixed(2)}</span>
+                  <span className="font-medium">{defaultContants.RUPEE_SIGN}{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Tax</span>
-                  <span className="font-medium">${tax.toFixed(2)}</span>
+                  <span className="font-medium">{defaultContants.RUPEE_SIGN}{tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">
                     Shipping {subtotal > 100 && <span className="text-green-600">(Free!)</span>}
                   </span>
-                  <span className="font-medium">${shipping.toFixed(2)}</span>
+                  <span className="font-medium">{defaultContants.RUPEE_SIGN}{shipping.toFixed(2)}</span>
                 </div>
                 <div className="border-t pt-3">
                   <div className="flex justify-between text-lg font-bold">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>{defaultContants.RUPEE_SIGN}{total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
