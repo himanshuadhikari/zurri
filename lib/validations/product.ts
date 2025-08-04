@@ -12,6 +12,7 @@ export interface ProductFormData {
   images: string[];
   sizes: string[];
   colors: string[];
+  variants: ProductVariant[];
   featured: boolean;
   active: boolean;
   details?: {
@@ -28,6 +29,16 @@ export interface ProductFormData {
     straps?: string;
     hemline?: string;
   };
+}
+
+
+export interface ProductVariant {
+  id?: string;
+  size: string;
+  color: string;
+  stock: number;
+  images: string[];
+  sku?: string;
 }
 
 export interface ValidationError {
@@ -102,12 +113,12 @@ export const validateProductForm = (data: ProductFormData): ValidationError[] =>
   }
 
   // Images validation
-  const validImages = data.images.filter(img => img.trim());
-  if (validImages.length === 0) {
-    errors.push({ field: 'images', message: 'At least one image URL is required' });
-  } else {
+  const validImages = data?.images?.filter(img => img.trim());
+  // if (validImages?.length === 0) {
+  //   errors.push({ field: 'images', message: 'At least one image URL is required' });
+  // } else {
     // Validate each image URL
-    validImages.forEach((img, index) => {
+    validImages?.forEach((img, index) => {
       try {
         new URL(img);
       } catch {
@@ -117,7 +128,7 @@ export const validateProductForm = (data: ProductFormData): ValidationError[] =>
         });
       }
     });
-  }
+  // }
 
   // Stock validation
   if (data.stock < 0) {

@@ -16,7 +16,7 @@ export interface Product {
   sku: string;
   stock: number;
   categoryId: string;
-  images: string[];
+  images?: string[];
   sizes: string[];
   colors: string[];
   featured: boolean;
@@ -29,7 +29,7 @@ export interface Product {
   updatedAt: string;
 }
 
-export const createProduct = async (productData: ProductFormData): Promise<ApiResponse<Product>> => {
+export const createProduct = async (productData: ProductFormData) => {
   try {
     const response = await fetch('/api/admin/products', {
       method: 'POST',
@@ -37,26 +37,64 @@ export const createProduct = async (productData: ProductFormData): Promise<ApiRe
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        ...productData,
-        images: productData.images.filter(img => img.trim()),
+        name: productData.name,
+        slug: productData.slug,
+        description: productData.description,
+        price: productData.price,
+        comparePrice: productData.comparePrice,
+        sku: productData.sku,
+        categoryId: productData.categoryId,
+        images: productData?.images?.filter(img => img.trim() !== ''),
+        sizes: productData.sizes,
+        colors: productData.colors,
+        variants: productData.variants,
+        featured: productData.featured,
+        active: productData.active,
+        details: productData.details,
       }),
     });
-
     const result = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(result.error || `HTTP error! status: ${response.status}`);
     }
-
     return result;
   } catch (error) {
-    console.error('Error creating product:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Failed to create product'
     };
   }
 };
+
+// export const createProduct = async (productData: ProductFormData): Promise<ApiResponse<Product>> => {
+//   try {
+//     const response = await fetch('/api/admin/products', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         ...productData,
+//         images: productData.images.filter(img => img.trim()),
+//       }),
+//     });
+
+//     const result = await response.json();
+
+//     if (!response.ok) {
+//       throw new Error(result.error || `HTTP error! status: ${response.status}`);
+//     }
+
+//     return result;
+//   } catch (error) {
+//     console.error('Error creating product:', error);
+//     return {
+//       success: false,
+//       error: error instanceof Error ? error.message : 'Failed to create product'
+//     };
+//   }
+// };
 
 
 export const editProduct = async (productData: ProductFormData): Promise<ApiResponse<Product>> => {
@@ -68,12 +106,12 @@ export const editProduct = async (productData: ProductFormData): Promise<ApiResp
       },
       body: JSON.stringify({
         ...productData,
-        images: productData.images.filter(img => img.trim()),
+        images: productData?.images?.filter(img => img.trim()),
       }),
     });
 
     const result = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(result.error || `HTTP error! status: ${response.status}`);
     }
@@ -93,7 +131,7 @@ export const getCategories = async (): Promise<ApiResponse<Array<{ id: string; n
   try {
     const response = await fetch('/api/categories');
     const result = await response.json();
-    
+
     if (!response.ok) {
       throw new Error(result.error || `HTTP error! status: ${response.status}`);
     }

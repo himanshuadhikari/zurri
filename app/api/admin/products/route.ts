@@ -42,7 +42,8 @@ export async function GET(request: NextRequest) {
       prisma.product.findMany({
         where,
         include: {
-          category: true
+          category: true,
+          variants: true
         },
         orderBy: { createdAt: 'desc' },
         skip,
@@ -82,6 +83,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Create new product
 export async function POST(request: NextRequest) {
   try {
     // Check authentication using your existing pattern
@@ -116,7 +118,8 @@ export async function POST(request: NextRequest) {
       stock,
       featured,
       active,
-      details
+      details,
+      variants
     } = body;
 
     // Validate required fields
@@ -134,12 +137,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!images || images.length === 0) {
-      return NextResponse.json(
-        { success: false, error: 'At least one image is required' },
-        { status: 400 }
-      );
-    }
+    // if (!images || images.length === 0) {
+    //   return NextResponse.json(
+    //     { success: false, error: 'At least one image is required' },
+    //     { status: 400 }
+    //   );
+    // }
 
     if (comparePrice !== null && comparePrice !== undefined && comparePrice <= price) {
       return NextResponse.json(
@@ -147,6 +150,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
 
     // Create the product
     const product = await prisma.product.create({
@@ -161,15 +165,46 @@ export async function POST(request: NextRequest) {
         images: JSON.stringify(images),
         sizes: JSON.stringify(sizes || []),
         colors: JSON.stringify(colors || []),
-        stock: parseInt(stock) || 0,
+        // stock: parseInt(stock) || 0,
         featured: Boolean(featured),
         active: Boolean(active),
         details: details ? JSON.stringify(details) : null,
       },
       include: {
         category: true,
+        variants: true
       },
     });
+    
+
+   // Create variants if provided
+    if (body.variants && body.variants.length > 0) {
+      // Create variants one by one
+      for (const variant of body.variants) {
+        await prisma.productVariant.create({
+          data: {
+            productId: product.id,
+            size: variant.size,
+            color: variant.color,
+            stock: parseInt(variant.stock) || 0,
+            images: variant.images?.length > 0 ? JSON.stringify(variant.images) : null,
+            sku: variant.sku || null
+          }
+        });
+      }
+    }
+
+    // Fetch the complete product with variants
+    const productWithVariants = await prisma.product.findUnique({
+      where: { id: product.id },
+      include: {
+        variants: true,
+        category: true,
+      }
+    });
+
+    return NextResponse.json(productWithVariants, { status: 201 });
+
 
     // Format the response to match your existing pattern
     const formattedProduct = {

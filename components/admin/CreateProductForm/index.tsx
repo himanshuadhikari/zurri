@@ -11,6 +11,7 @@ import AttributeFields from './forms/AttributeFields';
 import AdminLayout from '../AdminLayout';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import DetailsFields from './forms/DetailsFields';
+import VariantFields from './forms/VariantFields';
 
 const initialFormData: ProductFormData = {
     name: '',
@@ -26,6 +27,7 @@ const initialFormData: ProductFormData = {
     colors: [],
     featured: false,
     active: true,
+    variants: []
 };
 
 export default function CreateProductForm({ product = null }) {
@@ -91,7 +93,7 @@ export default function CreateProductForm({ product = null }) {
         try {
             const result =  formData.id ? await editProduct(formData) : await createProduct(formData);
 
-            if (!result?.success) {
+            if (!result?.id) {
                 throw new Error(result?.error || 'Failed to create product');
             }
 
@@ -188,6 +190,17 @@ export default function CreateProductForm({ product = null }) {
                             setFormData={setFormData}
                         />
                     </div>
+
+                      {/* Product Variants */}
+                    <div>
+                        <h3 className="text-md font-medium text-gray-900 mb-4">Stock Management</h3>
+                        <VariantFields
+                            formData={formData}
+                            setFormData={setFormData}
+                            errors={errors}
+                        />
+                    </div>
+
 
                     {/* Form Actions */}
                     <div className="border-t pt-6">

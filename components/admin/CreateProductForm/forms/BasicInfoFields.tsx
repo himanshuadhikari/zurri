@@ -210,7 +210,7 @@ export default function BasicInfoFields({
       </div>
 
       {/* Stock */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Stock Quantity <span className="text-[red]">*</span>
         </label>
@@ -231,7 +231,7 @@ export default function BasicInfoFields({
         {getFieldError('stock') && (
           <p className="mt-1 text-sm text-red-600">{getFieldError('stock')}</p>
         )}
-      </div>
+      </div> */}
 
       {/* Product Status */}
       <div className="space-y-4">

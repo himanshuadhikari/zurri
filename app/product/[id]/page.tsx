@@ -30,6 +30,7 @@ async function getProduct(id: string) {
             where: { slug: (id) },
             include: {
                 category: true,
+                variants: true,
                 reviews: {
                     include: {
                         user: {

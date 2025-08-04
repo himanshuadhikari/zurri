@@ -20,7 +20,7 @@ export default function ImageFields({ formData, setFormData, errors }: ImageFiel
   const addImageField = () => {
     setFormData(prev => ({
       ...prev,
-      images: [...prev.images, '']
+      images: [...prev?.images, '']
     }));
   };
 

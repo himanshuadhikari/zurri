@@ -55,6 +55,24 @@ model Category {
   @@map("categories")
 }
 
+model ProductVariant {
+  id        String   @id @default(cuid())
+  productId String
+  size      String
+  color     String
+  stock     Int      @default(0)
+  images    String?  @db.Text // Optional: JSON array of images for this color
+  sku       String?  @unique // Optional: unique SKU per variant like "COR-001-RED-XL"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, size, color])
+  @@map("product_variants")
+}
+
 model Product {
   id           String   @id @default(cuid())
   name         String
@@ -63,7 +81,6 @@ model Product {
   price        Decimal  @db.Decimal(10, 2)
   comparePrice Decimal? @db.Decimal(10, 2)
   sku          String   @unique
-  stock        Int      @default(0)
   images       String   @db.Text // JSON array of image URLs
   sizes        String   @db.Text // JSON array of available sizes
   colors       String   @db.Text // JSON array of available colors
@@ -72,6 +89,7 @@ model Product {
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  variants   ProductVariant[]
 
   // Relations
   categoryId String
