@@ -234,7 +234,7 @@ export default function CreateProductForm({ product = null }) {
                                             Creating...
                                         </>
                                     ) : (
-                                        'Create Product'
+                                        formData.id? 'Upate Product' :'Create Product' 
                                     )}
                                 </button>
                             </div>

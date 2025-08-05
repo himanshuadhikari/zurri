@@ -385,7 +385,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                         {color}
                         {!isAvailable && (
                           <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-full h-0.5 bg-red-500 transform rotate-45"></div>
+                            <div className="w-full h-0.5 bg-red-500 transform rotate-[23deg]"></div>
                           </div>
                         )}
                       </button>
