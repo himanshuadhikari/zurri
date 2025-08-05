@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Trash2, Upload, X } from 'lucide-react';
+import { Plus, Trash2, Upload, X, Image as ImageIcon } from 'lucide-react';
 import { ProductFormData, ProductVariant } from '@/lib/validations/product';
 
 interface VariantFieldsProps {
@@ -19,7 +19,8 @@ export default function VariantFields({ formData, setFormData, errors }: Variant
     images: [],
     sku: ''
   });
-console.log("formData", formData)
+  console.log("formData", formData)
+
   // Add a new variant
   const addVariant = () => {
     if (!newVariant.size || !newVariant.color) {
@@ -76,14 +77,20 @@ console.log("formData", formData)
   };
 
   // Add image to variant
-  const addVariantImage = (variantIndex: number, imageUrl: string) => {
-    if (!imageUrl.trim()) return;
-
+  const addVariantImage = (variantIndex: number) => {
     const updatedVariants = [...formData.variants];
-    updatedVariants[variantIndex].images = [
-      ...updatedVariants[variantIndex].images,
-      imageUrl.trim()
-    ];
+
+    if (updatedVariants[variantIndex]?.images?.length) {
+      updatedVariants[variantIndex].images = [
+        ...updatedVariants[variantIndex].images,
+        ''
+      ];
+    } else {
+      updatedVariants[variantIndex].images = [
+        ''
+      ];
+    }
+
     setFormData({
       ...formData,
       variants: updatedVariants
@@ -102,6 +109,16 @@ console.log("formData", formData)
     });
   };
 
+  // Update variant image URL
+  const updateVariantImage = (variantIndex: number, imageIndex: number, url: string) => {
+    const updatedVariants = [...formData.variants];
+    updatedVariants[variantIndex].images[imageIndex] = url;
+    setFormData({
+      ...formData,
+      variants: updatedVariants
+    });
+  };
+
   // Generate variants from sizes and colors
   const generateVariants = () => {
     if (formData.sizes.length === 0 || formData.colors.length === 0) {
@@ -110,14 +127,14 @@ console.log("formData", formData)
     }
 
     const newVariants: ProductVariant[] = [];
-    
+
     formData.sizes.forEach(size => {
       formData.colors.forEach(color => {
         // Check if this combination already exists
         const exists = formData.variants.find(
           v => v.size === size && v.color === color
         );
-        
+
         if (!exists) {
           newVariants.push({
             size,
@@ -137,7 +154,7 @@ console.log("formData", formData)
       });
     }
   };
-
+  
   return (
     <div className="space-y-6">
       {/* Header with Generate Button */}
@@ -168,8 +185,9 @@ console.log("formData", formData)
       {/* Existing Variants */}
       {formData.variants.length > 0 && (
         <div className="space-y-4">
-          {formData.variants.map((variant, index) => (
-            <div key={index} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+          {formData.variants.map((variant, index) => {
+            const variantImages = typeof variant?.images === "string" ? JSON.parse(variant?.images || '[]') : variant?.images;
+            return   <div key={index} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
               <div className="flex items-center justify-between mb-4">
                 <h5 className="font-medium text-gray-900">
                   {variant.color} - {variant.size}
@@ -191,8 +209,8 @@ console.log("formData", formData)
                   <input
                     type="text"
                     value={variant.size}
-                    onChange={(e) => updateVariant(index, 'size', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    readOnly
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
                   />
                 </div>
 
@@ -203,8 +221,8 @@ console.log("formData", formData)
                   <input
                     type="text"
                     value={variant.color}
-                    onChange={(e) => updateVariant(index, 'color', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    readOnly
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-600 cursor-not-allowed"
                   />
                 </div>
 
@@ -216,7 +234,7 @@ console.log("formData", formData)
                     type="number"
                     min="0"
                     value={variant.stock}
-                    onChange={(e) => updateVariant(index, 'stock', parseInt(e.target.value) || 0)}
+                    onChange={(e) => updateVariant(index, 'stock', Number(e.target.value) || 0)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -235,46 +253,76 @@ console.log("formData", formData)
                 </div>
               </div>
 
-              {/* Color-specific Images */}
-              <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Color-specific Images (Optional)
-                </label>
-                <div className="space-y-2">
-                  {variant?.images && variant.images?.map((image, imageIndex) => (
-                    <div key={imageIndex} className="flex items-center gap-2">
-                      <input
-                        type="url"
-                        value={image}
-                        onChange={(e) => {
-                          const updatedVariants = [...formData.variants];
-                          updatedVariants[index].images[imageIndex] = e.target.value;
-                          setFormData({ ...formData, variants: updatedVariants });
-                        }}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="https://example.com/red-corset.jpg"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeVariantImage(index, imageIndex)}
-                        className="text-red-600 hover:text-red-800 p-2"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
+              {/* Enhanced Color-specific Images with Preview */}
+              <div className="mt-6">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Color-specific Images (Optional)
+                  </label>
                   <button
                     type="button"
-                    onClick={() => addVariantImage(index, '')}
-                    className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                    onClick={() => addVariantImage(index)}
+                    className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
                   >
                     <Plus className="w-4 h-4" />
                     Add Image
                   </button>
                 </div>
+
+                {variantImages && variantImages.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {variantImages.map((image, imageIndex) => (
+                      <div key={imageIndex} className="group relative">
+                        <div className="aspect-square bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 overflow-hidden">
+                          {image ? (
+                            <img
+                              src={image}
+                              alt={`${variant.color} variant ${imageIndex + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                target.nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                          ) : null}
+                          <div className={`${image ? 'hidden' : 'flex'} items-center justify-center h-full`}>
+                            <ImageIcon className="w-8 h-8 text-gray-400" />
+                          </div>
+
+                          {/* Remove button - shows on hover */}
+                          <button
+                            type="button"
+                            onClick={() => removeVariantImage(index, imageIndex)}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+
+                        {/* URL Input */}
+                        <input
+                          type="url"
+                          value={image}
+                          onChange={(e) => updateVariantImage(index, imageIndex, e.target.value)}
+                          className="mt-2 w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          placeholder="https://example.com/image.jpg"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+                    <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-500">No images added for this variant</p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Click &quot;Add Image&quot; to add color-specific photos
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
-          ))}
+          })}
         </div>
       )}
 

@@ -115,7 +115,7 @@ export default function ProductImageGallery({
         {/* Thumbnail Strip */}
         {currentImages.length > 1 && (
           <div className="flex space-x-3 overflow-x-auto pb-2 scrollbar-hide">
-            {currentImages.map((image, index) => (
+            {currentImages?.map?.((image, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}

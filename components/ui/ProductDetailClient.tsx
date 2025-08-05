@@ -274,7 +274,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
   const totalStock = getTotalStock();
   const availableColors = getAvailableColors();
   const availableSizes = getAvailableSizes();
-
+  console.log("product><>>>>>>>>>>>",product)
   return (
     <div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -551,7 +551,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
             <p className="text-gray-600 leading-relaxed break-words">{product.description}</p>
 
             {/* Variant Stock Summary */}
-            {Object.keys(stockData).length > 0 && (
+            {/* {Object.keys(stockData).length > 0 && (
               <div className="border-t pt-6">
                 <h3 className="text-sm font-medium text-gray-900 mb-4">Stock by Variant</h3>
                 <div className="space-y-3">
@@ -575,7 +575,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Product Details Section */}
             {product.details && Object.values(product.details).some(value => value) && (
