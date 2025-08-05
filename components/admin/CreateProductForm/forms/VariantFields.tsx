@@ -19,7 +19,6 @@ export default function VariantFields({ formData, setFormData, errors }: Variant
     images: [],
     sku: ''
   });
-  console.log("formData", formData)
 
   // Add a new variant
   const addVariant = () => {

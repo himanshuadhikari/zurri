@@ -274,7 +274,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
   const totalStock = getTotalStock();
   const availableColors = getAvailableColors();
   const availableSizes = getAvailableSizes();
-  console.log("product><>>>>>>>>>>>",product)
+  // console.log("product><>>>>>>>>>>>",product)
   return (
     <div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

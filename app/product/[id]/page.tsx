@@ -8,7 +8,6 @@ import { parseStringObject } from '@/app/helper/productHelper';
 
 export default async function ProductDetailPage({ params }: { params: { id: string } }) {
     const product = await getProduct(params.id);
-
     if (!product) {
         notFound();
     }
@@ -51,14 +50,9 @@ async function getProduct(id: string) {
             return null;
         }
 
-        parseStringObject(product)
-        return {
-            ...product,
-            sizes: product.sizes as string[],
-            colors: product.colors as string[],
-            images: product.images as string[],
-            details: product.details as string[]
-        };
+        parseStringObject(product);
+        
+        return product
     } catch (error) {
         console.error('Error fetching product:', error);
         return null;

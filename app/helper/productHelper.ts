@@ -5,5 +5,11 @@ export function parseStringObject(product: Product) {
     product.sizes = JSON.parse(product.sizes || "[]");
     product.colors = JSON.parse(product.colors || "[]");
     product.details = JSON.parse(product.details || "[]");
+    product.variants = product.variants.map(variant => {
+        return {
+            ...variant,
+            images: JSON.parse(variant.images || "[]")
+        }
+    })
     return product;
 }
