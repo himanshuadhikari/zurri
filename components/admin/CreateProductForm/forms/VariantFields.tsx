@@ -241,7 +241,7 @@ console.log("formData", formData)
                   Color-specific Images (Optional)
                 </label>
                 <div className="space-y-2">
-                  {variant?.images && JSON.parse(variant.images || '[]')?.map((image, imageIndex) => (
+                  {variant?.images && variant.images?.map((image, imageIndex) => (
                     <div key={imageIndex} className="flex items-center gap-2">
                       <input
                         type="url"

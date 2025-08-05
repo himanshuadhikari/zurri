@@ -178,9 +178,9 @@ export async function POST(request: NextRequest) {
     
 
    // Create variants if provided
-    if (body.variants && body.variants.length > 0) {
+    if (variants && variants.length > 0) {
       // Create variants one by one
-      for (const variant of body.variants) {
+      for (const variant of variants) {
         await prisma.productVariant.create({
           data: {
             productId: product.id,
