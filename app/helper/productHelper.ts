@@ -7,11 +7,12 @@ export function parseStringObject(product: Product) {
     product.details = JSON.parse(product.details || "[]");
     product.price = +product.price;
     product.comparePrice = +product.comparePrice;
-    product.variants = product.variants.map(variant => {
+    product.variants = product?.variants?.map(variant => {
         return {
             ...variant,
             images: JSON.parse(variant.images || "[]")
         }
-    })
+    }) || [];
+    
     return product;
 }
