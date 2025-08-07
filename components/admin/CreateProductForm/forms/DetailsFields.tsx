@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Plus, X } from 'lucide-react';
 
 interface DetailsFieldsProps {
@@ -72,7 +72,41 @@ export default function DetailsFields({ formData, setFormData, errors }: Details
 
   const [customValues, setCustomValues] = useState<{ [key: string]: string[] }>({});
   const [showCustomInput, setShowCustomInput] = useState<{ [key: string]: boolean }>({});
+  const customInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const textInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
 
+  // Initialize custom values from existing form data
+  useEffect(() => {
+    if (formData?.details) {
+      const initialCustomValues: { [key: string]: string[] } = {};
+      
+      Object.keys(formData.details).forEach(field => {
+        const value = formData.details[field];
+        if (value && typeof value === 'string') {
+          // Check if the value is not in standard options
+          const standardOptions = STANDARD_VALUES[field as keyof typeof STANDARD_VALUES] || [];
+          if (!standardOptions.includes(value)) {
+            // This is a custom value
+            initialCustomValues[field] = [value];
+          }
+        }
+      });
+      
+      setCustomValues(initialCustomValues);
+    }
+  }, [formData?.details]);
+
+  // Initialize text input values when component mounts or formData changes
+  useEffect(() => {
+    if (formData?.details) {
+      Object.keys(textInputRefs.current).forEach(field => {
+        const input = textInputRefs.current[field];
+        if (input && formData.details[field] !== undefined) {
+          input.value = formData.details[field] || '';
+        }
+      });
+    }
+  }, [formData?.details]);
   const handleDetailChange = (field: string, value: string) => {
     setFormData({
       ...formData,
@@ -83,7 +117,7 @@ export default function DetailsFields({ formData, setFormData, errors }: Details
     });
   };
 
-  const handleTextDetailChange = (field: string, value: string) => {
+  const updateTextDetail = (field: string, value: string) => {
     setFormData({
       ...formData,
       details: {
@@ -148,21 +182,35 @@ export default function DetailsFields({ formData, setFormData, errors }: Details
         {showCustomInput[field] ? (
           <div className="flex gap-2">
             <input
+              ref={(el) => customInputRefs.current[field] = el}
               type="text"
-              value={formData.details?.[field] || ""}
               placeholder={`Add custom ${label.toLowerCase()}`}
               className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
                   e.preventDefault();
-                  addCustomValue(field, e.currentTarget.value);
-                  e.currentTarget.value = '';
+                  const inputValue = e.currentTarget.value;
+                  addCustomValue(field, inputValue);
+                  e.currentTarget.value = ''; // Clear the input
                 }
               }}
+              // onBlur={() => {
+              //   // Auto-add on blur if there's a value
+              //   const inputValue = customInputRefs.current[field]?.value;
+              //   if (inputValue?.trim()) {
+              //     addCustomValue(field, inputValue);
+              //   }
+              // }}
             />
             <button
               type="button"
-              onClick={() => setShowCustomInput(prev => ({ ...prev, [field]: false }))}
+              onClick={() => {
+                setShowCustomInput(prev => ({ ...prev, [field]: false }));
+                // Clear the input when closing
+                if (customInputRefs.current[field]) {
+                  customInputRefs.current[field]!.value = '';
+                }
+              }}
               className="px-3 py-2 text-gray-500 hover:text-gray-700"
             >
               <X className="w-4 h-4" />
@@ -171,7 +219,13 @@ export default function DetailsFields({ formData, setFormData, errors }: Details
         ) : (
           <button
             type="button"
-            onClick={() => setShowCustomInput(prev => ({ ...prev, [field]: true }))}
+            onClick={() => {
+              setShowCustomInput(prev => ({ ...prev, [field]: true }));
+              // Focus the input after it's rendered
+              setTimeout(() => {
+                customInputRefs.current[field]?.focus();
+              }, 0);
+            }}
             className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700"
           >
             <Plus className="w-4 h-4" />
@@ -220,9 +274,10 @@ export default function DetailsFields({ formData, setFormData, errors }: Details
         {label}
       </label>
       <input
+        ref={(el) => textInputRefs.current[field] = el}
         type="text"
-        value={formData.details?.[field] || ''}
-        onChange={(e) => handleTextDetailChange(field, e.target.value)}
+        defaultValue={formData.details?.[field] || ''}
+        onBlur={(e) => updateTextDetail(field, e.target.value)}
         placeholder={placeholder}
         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
       />
@@ -231,6 +286,8 @@ export default function DetailsFields({ formData, setFormData, errors }: Details
       )}
     </div>
   );
+
+  console.log("formData<<<<<<<<<", formData);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
