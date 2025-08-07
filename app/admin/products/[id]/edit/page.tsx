@@ -54,7 +54,7 @@ async function getProduct(id: string) {
 
 async function EditProductPage({ params }: { params: { id: string } }) {
     const product = await getProduct(params.id);
-
+    
     return (
         <div className="space-y-6">
             <div>

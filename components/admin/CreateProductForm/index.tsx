@@ -138,6 +138,7 @@ export default function CreateProductForm({ product = null }) {
             </AdminLayout>
         );
     }
+   console.log(product);
     return (
         <AdminLayout>
             <div className="bg-white rounded-lg shadow-sm border p-6">
