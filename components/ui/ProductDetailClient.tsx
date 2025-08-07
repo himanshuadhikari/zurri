@@ -317,15 +317,15 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                     ({product.reviews.length} reviews)
                   </span>
                 </div>
-                {getCurrentVariantSKU() && (
+                {/* {getCurrentVariantSKU() && (
                   <span className="text-sm text-gray-600">SKU: {getCurrentVariantSKU()}</span>
-                )}
+                )} */}
               </div>
               <p className="text-3xl font-bold text-gray-900">{defaultContants.RUPEE_SIGN}{product.price}</p>
             </div>
 
             {/* Stock Status */}
-            <div className="bg-gray-50 p-4 rounded-lg">
+            {/* <div className="bg-gray-50 p-4 rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-gray-900">Stock Status</span>
                 <span className="text-sm text-gray-600">Total: {totalStock} items</span>
@@ -355,7 +355,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                   <span className="text-sm text-gray-600">Select size and color to check availability</span>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Color Selection */}
             {product.colors.length > 0 && (
@@ -441,7 +441,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                   })}
                 </div>
                 
-                {selectedColor && (
+                {/* {selectedColor && (
                   <div className="mt-2 text-xs text-gray-500">
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center space-x-1">
@@ -454,7 +454,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                       </div>
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
             )}
 
@@ -479,7 +479,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                 >
                   <Plus className="w-4 h-4" />
                 </button>
-                <div className="flex items-center space-x-2">
+                {/* <div className="flex items-center space-x-2">
                   {currentStock > 0 ? (
                     <>
                       <span className="text-sm text-gray-600">
@@ -496,7 +496,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
                       Out of stock
                     </span>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -710,22 +710,22 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
             <div className="border-t pt-6 space-y-4">
               <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <Truck className="w-5 h-5" />
-                <span>Free shipping on orders over $50</span>
+                <span>Free shipping on ever order.</span>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-gray-600">
+              {/* <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <RotateCcw className="w-5 h-5" />
                 <span>30-day return policy</span>
               </div>
               <div className="flex items-center space-x-3 text-sm text-gray-600">
                 <Shield className="w-5 h-5" />
                 <span>2-year warranty</span>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
 
         {/* Reviews Section */}
-        <div className="mt-16 border-t pt-16">
+        <div className="mt-8 border-t pt-16">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-gray-900">
               Customer Reviews ({product.reviews.length})
