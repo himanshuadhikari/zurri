@@ -67,8 +67,8 @@ export default function CartPage() {
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
               <div key={`${item.id}-${item.size}-${item.color}`} className="bg-white rounded-lg shadow-sm p-6">
-                <div className="flex items-center space-x-4">
-                  <div className="flex-shrink-0 w-24 h-24 relative rounded-lg overflow-hidden">
+                <div className="grid grid-cols-4 gap-4 md:flex md:items-center md:space-x-4">
+                  <div className="col-span-1 md:flex-shrink-0 md:w-24 md:h-24 relative rounded-lg overflow-hidden">
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -77,7 +77,7 @@ export default function CartPage() {
                     />
                   </div>
                   
-                  <div className="flex-1 min-w-0">
+                  <div className="col-span-3 md:flex-1 md:min-w-[250px] md:max-w-[250px]">
                     <Link href={`/product/${item.slug}`} className="text-lg font-medium text-gray-900 hover:text-blue-600">
                       {item.name}
                     </Link>
@@ -88,7 +88,7 @@ export default function CartPage() {
                     <p className="mt-1 text-lg font-medium text-gray-900">{defaultContants.RUPEE_SIGN}{item.price}</p>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
+                  <div className="col-span-2 md:flex md:items-center md:space-x-2">
                     <button
                       onClick={() => handleQuantityChange(item.id, item.quantity - 1, item.size, item.color)}
                       className="p-1 rounded-full hover:bg-gray-100 transition-colors"
@@ -104,16 +104,16 @@ export default function CartPage() {
                     </button>
                   </div>
                   
-                  <div className="text-right">
+                  <div className="col-span-2 text-right">
                     <p className="text-lg font-medium text-gray-900">
                       {defaultContants.RUPEE_SIGN}{(item.price * item.quantity).toFixed(2)}
                     </p>
-                    <button
+                    {/* <button
                       onClick={() => handleRemoveItem(item.id, item.size, item.color)}
                       className="mt-2 text-red-600 hover:text-red-800 transition-colors"
                     >
                       <TrashIcon className="h-5 w-5" />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>
