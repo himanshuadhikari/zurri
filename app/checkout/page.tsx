@@ -44,6 +44,11 @@ interface CustomerInfo {
     phone: string;
 }
 
+interface IOrder{
+    id:string;
+    amount:number;
+
+}
 export default function CheckoutPage() {
     const router = useRouter();
     const { items, updateQuantity, removeItem, getTotalPrice, clearCart } = useCartStore();
@@ -117,7 +122,47 @@ export default function CheckoutPage() {
     const shippingCost = subtotal > 500 ? 0 : 50; // Free shipping over ₹500, otherwise ₹50
     const tax = subtotal * 0.08;
     const total = subtotal + shippingCost + tax;
+  const handlePayment = async (order:IOrder) => {
 
+    const options = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: order.amount,
+      currency: "INR",
+      name: "ZURRI",
+      description: "Test Transaction",
+      order_id: order.id,
+      handler: async function (response: any) {
+        console.log("Payment Success", response);
+        // send response to backend for verification
+                const vResponse = await fetch('/api/verify-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(response),
+            });
+
+            const result = await vResponse.json();
+         if (result.success) {
+                // Redirect to success page
+                router.push(`/order-confirmation?orderId=${result.order.id}`);
+            } else {
+                alert(result.error || 'Failed to place order');
+            }
+      },
+      prefill: {
+        name: `${customerInfo.firstName} ${customerInfo.lastName}`,
+        email: customerInfo.email,
+        contact: customerInfo.phone,
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    const razorpay = new (window as any).Razorpay(options);
+    razorpay.open();
+  };
     const handleSubmitOrder = async () => {
         setLoading(true);
         try {
@@ -142,13 +187,8 @@ export default function CheckoutPage() {
             });
 
             const result = await response.json();
-
-            if (result.success) {
-                // Redirect to success page
-                router.push(`/order-confirmation?orderId=${result.order.id}`);
-            } else {
-                alert(result.error || 'Failed to place order');
-            }
+            handlePayment(result.order)
+           
         } catch (error) {
             console.error('Order submission error:', error);
             alert('Failed to place order. Please try again.');
