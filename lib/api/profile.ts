@@ -4,7 +4,7 @@ export interface UserProfile {
   lastName: string;
   email: string;
   phone?: string;
-  dateOfBirth?: string;
+  date_of_birth?: string;
   gender?: 'male' | 'female' | 'other' | 'prefer-not-to-say';
   bio?: string;
   profileImage?: string;

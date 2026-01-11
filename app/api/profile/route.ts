@@ -125,7 +125,7 @@ export async function PUT(request: NextRequest) {
         lastName: data.lastName,
         email: data.email,
         phone: data.phone || null,
-        date_of_birth: data.dateOfBirth ? new Date(data.dateOfBirth) : null,
+        date_of_birth: data.date_of_birth || "",
         gender: data.gender || null,
         bio: data.bio || null,
         profileImage: data.profileImage || null,

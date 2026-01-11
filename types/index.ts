@@ -5,6 +5,7 @@ export interface User {
   lastName: string;
   phone?: string;
   role: 'USER' | 'ADMIN';
+  profileImage?: string;
 }
 
 export interface Category {

@@ -10,19 +10,21 @@ import ProfileImageUpload from '../ProfileImageUpload';
 import PersonalInfoForm from '../PersonalInfoForm';
 import AddressForm from '../AddressForm';
 import PreferencesForm from '../PreferencesForm';
+import { useAuthStore } from '@/lib/auth-store';
 
 interface ProfileEditFormProps {
   initialData: UserProfile;
 }
 
 export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
+  const { setUser } = useAuthStore();
   const router = useRouter();
   const [formData, setFormData] = useState<ProfileFormData>({
     firstName: initialData?.firstName,
     lastName: initialData?.lastName,
     email: initialData?.email,
     phone: initialData?.phone || '',
-    dateOfBirth: initialData?.dateOfBirth || '',
+    date_of_birth: initialData?.date_of_birth || '',
     gender: initialData?.gender,
     bio: initialData?.bio || '',
     profileImage: initialData?.profileImage || '',
@@ -35,6 +37,7 @@ export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
     notifications: initialData?.notifications,
     marketing: initialData?.marketing,
   });
+  // console.log("user", initialData)
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,7 +52,7 @@ export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
       lastName: initialData?.lastName,
       email: initialData?.email,
       phone: initialData?.phone || '',
-      dateOfBirth: initialData?.dateOfBirth || '',
+      date_of_birth: initialData?.date_of_birth || '',
       gender: initialData?.gender,
       bio: initialData?.bio || '',
       profileImage: initialData?.profileImage || '',
@@ -67,7 +70,7 @@ export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
 
   const handleFieldChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
+
     // Clear error for this field
     if (errors[field]) {
       setErrors(prev => {
@@ -88,16 +91,17 @@ export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate form
     const validationErrors = validateProfile(formData);
     if (validationErrors.length > 0) {
       const errorMap: Record<string, string> = {};
+
       validationErrors.forEach(error => {
         errorMap[error.field] = error.message;
       });
+
       setErrors(errorMap);
-      console.log(errorMap, formData);
       toast.error('Please fix the errors before submitting');
       return;
     }
@@ -105,7 +109,9 @@ export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
     setIsSubmitting(true);
     try {
       const result = await updateProfile(formData);
+
       if (result.success) {
+        setUser(formData);
         toast.success('Profile updated successfully!');
         router.push('/profile');
       } else {
@@ -124,7 +130,7 @@ export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
       lastName: initialData?.lastName,
       email: initialData?.email,
       phone: initialData?.phone || '',
-      dateOfBirth: initialData?.dateOfBirth || '',
+      date_of_birth: initialData?.date_of_birth || '',
       gender: initialData?.gender,
       bio: initialData?.bio || '',
       profileImage: initialData?.profileImage || '',
@@ -215,7 +221,7 @@ export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
                 <X className="w-4 h-4" />
                 <span>Cancel</span>
               </button>
-              
+
               <button
                 type="button"
                 onClick={handleReset}
@@ -270,11 +276,11 @@ export default function ProfileEditForm({ initialData }: ProfileEditFormProps) {
                 Delete Account
               </h3>
             </div>
-            
+
             <p className="text-sm text-gray-500 mb-6">
               Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.
             </p>
-            
+
             <div className="flex space-x-3">
               <button
                 type="button"

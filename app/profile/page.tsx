@@ -12,7 +12,6 @@ export default function Profile() {
 
   const { getUser } = useAuthStore();
   const user = getUser();
-  console.log(user);
   // const session = await getServerSession(authOptions);
   
   // if (!user?.id) {

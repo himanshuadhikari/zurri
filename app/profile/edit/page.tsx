@@ -9,7 +9,6 @@ import { useAuthStore } from '@/lib/auth-store';
 export default function EditProfile() {
     const { getUser } = useAuthStore();
     const user = getUser();
-
     // const user = await prisma.user.findUnique({
     //     where: { id: session.user.id },
     //     select: {

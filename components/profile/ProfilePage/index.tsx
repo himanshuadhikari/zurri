@@ -23,7 +23,7 @@ interface UserProfile {
   lastName: string;
   email: string;
   phone?: string | null;
-  dateOfBirth?: string | null;
+  date_of_birth?: string | null;
   gender?: 'male' | 'female' | 'other' | 'prefer-not-to-say' | null;
   bio?: string | null;
   profileImage?: string | null;
@@ -41,7 +41,7 @@ interface UserProfile {
 }
 
 interface ProfilePageProps {
-  user: UserProfile;
+  user: UserProfile | null;
 }
 
 export default function ProfilePage({ user }: ProfilePageProps) {
@@ -136,7 +136,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Date of Birth</label>
-                  <p className="text-gray-900">{formatDate(user?.dateOfBirth)}</p>
+                  <p className="text-gray-900">{formatDate(user?.date_of_birth)}</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-500 mb-1">Gender</label>

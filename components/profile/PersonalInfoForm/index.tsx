@@ -9,7 +9,7 @@ interface PersonalInfoFormProps {
     lastName: string;
     email: string;
     phone?: string;
-    dateOfBirth?: string;
+    date_of_birth?: string;
     gender?: 'male' | 'female' | 'other' | 'prefer-not-to-say';
     bio?: string;
   };
@@ -128,7 +128,7 @@ export default function PersonalInfoForm({
 
         {/* Date of Birth */}
         <div>
-          <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="date_of_birth" className="block text-sm font-medium text-gray-700 mb-1">
             <div className="flex items-center space-x-1">
               <Calendar className="w-4 h-4" />
               <span>Date of Birth</span>
@@ -136,15 +136,15 @@ export default function PersonalInfoForm({
           </label>
           <input
             type="date"
-            id="dateOfBirth"
-            value={formData.dateOfBirth || ''}
-            onChange={(e) => onChange('dateOfBirth', e.target.value)}
+            id="date_of_birth"
+            value={formData.date_of_birth || ''}
+            onChange={(e) => onChange('date_of_birth', e.target.value)}
             className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-              errors.dateOfBirth ? 'border-red-300' : 'border-gray-300'
+              errors.date_of_birth ? 'border-red-300' : 'border-gray-300'
             }`}
           />
-          {errors.dateOfBirth && (
-            <p className="mt-1 text-sm text-red-600">{errors.dateOfBirth}</p>
+          {errors.date_of_birth && (
+            <p className="mt-1 text-sm text-red-600">{errors.date_of_birth}</p>
           )}
         </div>
       </div>
@@ -157,6 +157,7 @@ export default function PersonalInfoForm({
             <span>Gender</span>
           </div>
         </label>
+        
         <select
           id="gender"
           value={formData.gender || ''}
