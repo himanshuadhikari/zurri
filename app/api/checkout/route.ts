@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import Razorpay from "razorpay";
 
 const prisma = new PrismaClient();
 
@@ -98,13 +99,22 @@ export async function POST(request: NextRequest) {
         }
       });
     }
+ const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
 
-    // In a real app, you'd integrate with payment processor here
-    // For now, we'll simulate a successful order
+    const orderID = await razorpay.orders.create({
+      amount:total*100,
+      currency: "INR",
+      receipt: `rcpt_${Date.now()}`,
+    });
+
+    // return Response.json(orderID);
 
     return NextResponse.json({
       success: true,
-      order,
+      order:orderID,
       message: 'Order placed successfully!'
     });
 
