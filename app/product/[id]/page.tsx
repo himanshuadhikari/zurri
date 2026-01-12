@@ -11,7 +11,7 @@ export default async function ProductDetailPage({ params }: { params: { id: stri
     if (!product) {
         notFound();
     }
-
+   
     const relatedProducts = await getRelatedProducts(product.categoryId, product.id);
 
     return (
@@ -45,7 +45,7 @@ async function getProduct(id: string) {
                 }
             }
         });
-
+        
         if (!product) {
             return null;
         }

@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -20,23 +17,24 @@ model User {
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  date_of_birth  String? // or use DateTime? if you're storing dates
+  date_of_birth  String?
   gender       String?
   bio          String?
   profileImage String?
   street       String?
   city         String?
-  state        String?
+  state       String?
   zipCode      String?
-  country      String?
+  country       String?
   newsletter   Boolean
   notifications Boolean
   marketing    Boolean
+
   // Relations
   orders    Order[]
   addresses Address[]
   reviews   Review[]
-  cart      Cart?    // one-to-one relation
+  cart      Cart?
 
   @@map("users")
 }
@@ -50,29 +48,9 @@ model Category {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  // Relations
   products Product[]
 
   @@map("categories")
-}
-
-model ProductVariant {
-  id        String   @id @default(cuid())
-  productId String
-  size      String
-  color     String
-  stock     Int      @default(0)
-  images    String?  @db.Text // Optional: JSON array of images for this color
-  sku       String?  @unique // Optional: unique SKU per variant like "COR-001-RED-XL"
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  cartItems CartItem[]
-
-  // Relations
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@unique([productId, size, color])
-  @@map("product_variants")
 }
 
 model Product {
@@ -83,61 +61,98 @@ model Product {
   price        Decimal  @db.Decimal(10, 2)
   comparePrice Decimal? @db.Decimal(10, 2)
   sku          String   @unique
-  images       String   @db.Text // JSON array of image URLs
-  sizes        String   @db.Text // JSON array of available sizes
-  colors       String   @db.Text // JSON array of available colors
-  details      String?  @db.Text // JSON object of product details
+  images       String   @db.Text
+  sizes        String   @db.Text
+  colors       String   @db.Text
+  details      String?  @db.Text
   featured     Boolean  @default(false)
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  variants     ProductVariant[]
 
-  // Relations
   categoryId String
-  category   Category    @relation(fields: [categoryId], references: [id])
-  orderItems OrderItem[]
+  category   Category @relation(fields: [categoryId], references: [id])
+  variants   ProductVariant[]
   reviews    Review[]
 
-  @@map("products")
+  @@map("products") // <- This ensures Prisma uses the existing `products` table
 }
+
+model ProductVariant {
+  id        String   @id @default(cuid())
+  productId String
+  size      String
+  color     String
+  price Decimal? @db.Decimal(10, 2) // optional for now
+  stock     Int      @default(0)
+  images    String?  @db.Text
+  sku       String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  product    Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@unique([productId, size, color])
+  @@map("product_variants")
+}
+
+model Cart {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  updatedAt DateTime @updatedAt
+
+  user  User @relation(fields: [userId], references: [id])
+  items CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  variantId String
+  quantity  Int
+
+  cart    Cart           @relation(fields: [cartId], references: [id])
+  variant ProductVariant @relation(fields: [variantId], references: [id])
+
+  @@unique([cartId, variantId])
+  @@map("cart_items")
+}
+
 
 model Order {
   id              String        @id @default(cuid())
   orderNumber     String        @unique
   status          OrderStatus   @default(PENDING)
-  total           Decimal       @db.Decimal(10, 2)
   subtotal        Decimal       @db.Decimal(10, 2)
   tax             Decimal       @db.Decimal(10, 2)
   shipping        Decimal       @db.Decimal(10, 2)
-  shippingAddress String        @db.Text // JSON
+  total           Decimal       @db.Decimal(10, 2)
+  shippingAddress String        @db.Text
   paymentMethod   String
   paymentStatus   PaymentStatus @default(PENDING)
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
 
-  // Relations
   userId     String
   user       User        @relation(fields: [userId], references: [id])
   orderItems OrderItem[]
-
-  @@map("orders")
 }
 
 model OrderItem {
-  id       String  @id @default(cuid())
-  quantity Int
-  price    Decimal @db.Decimal(10, 2)
-  size     String?
-  color    String?
-
-  // Relations
+  id        String         @id @default(cuid())
   orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+  variantId String
+  quantity  Int
+  price     Decimal        @db.Decimal(10, 2) // snapshot price at checkout
+  size      String?
+  color     String?
 
-  @@map("order_items")
+  order     Order          @relation(fields: [orderId], references: [id])
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
 }
 
 model Address {
@@ -145,12 +160,12 @@ model Address {
   firstName String
   lastName  String
   phone     String
-  address1 String
-  address2 String?
+  address1  String
+  address2  String?
   city      String
   state     String
-  zipCode  String
-  country  String   @default("India")
+  zipCode   String
+  country   String   @default("India")
   isDefault Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -164,19 +179,17 @@ model Address {
 
 model Review {
   id        String   @id @default(cuid())
-  rating    Int // 1-5
+  rating    Int
   title     String?
   comment   String?  @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Relations
   userId    String
   user      User    @relation(fields: [userId], references: [id])
   productId String
   product   Product @relation(fields: [productId], references: [id])
-
-  @@map("reviews")
+  @@map("reviews") // <- ensures Prisma uses the existing `reviews` table
 }
 
 enum Role {
@@ -199,30 +212,3 @@ enum PaymentStatus {
   FAILED
   REFUNDED
 }
-
-
-
-model Cart {
-  id        String   @id @default(cuid())
-  userId    String   @unique
-  updatedAt DateTime @updatedAt
-
-  user  User @relation(fields: [userId], references: [id])
-  items CartItem[]
-
-  @@map("carts")
-}
-
-model CartItem {
-  id        String   @id @default(cuid())
-  cartId    String
-  variantId String
-  quantity  Int
-
-  cart    Cart           @relation(fields: [cartId], references: [id], map: "cartitem_cart_fkey")
-  variant ProductVariant @relation(fields: [variantId], references: [id], map: "cartitem_variant_fkey")
-
-  @@unique([cartId, variantId])
-  @@map("cart_items")
-}
-

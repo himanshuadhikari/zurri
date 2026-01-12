@@ -4,22 +4,53 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { TrashIcon, PlusIcon, MinusIcon } from '@heroicons/react/24/outline';
 import { useCartStore } from '@/lib/cart-store';
+import { useAuthStore } from '@/lib/auth-store';
 import toast from 'react-hot-toast';
 import defaultContants from '@/constants';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem, getTotalPrice, clearCart } = useCartStore();
+  const { user } = useAuthStore();
+  const { items, updateQuantity, removeItem, clearCart, syncCartWithBackend } = useCartStore();
   const [mounted, setMounted] = useState(false);
-
+  const [loading, setLoading] = useState(true);
+  
+  // Fetch cart from backend if user is logged in
   useEffect(() => {
     setMounted(true);
-  }, []);
+    const syncCart = async () => {
+      if (user?.id) {
+        setLoading(true);
+        await syncCartWithBackend();
+        setLoading(false);
+      } else {
+        setLoading(false);
+      }
+    };
+    syncCart();
+  }, [user]);
 
-  if (!mounted) {
-    return <div>Loading...</div>;
+  if (!mounted || loading) return <div>Loading...</div>;
+
+  if (items.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
+            <p className="text-gray-600 mb-6">Looks like you haven&apos;t added anything to your cart yet.</p>
+            <Link
+              href="/products"
+              className="inline-flex items-center px-6 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition-colors"
+            >
+              Continue Shopping
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  const subtotal = getTotalPrice();
+  const subtotal = items.reduce((total, item) => total + item.price * item.quantity, 0);
   const tax = subtotal * 0.08; // 8% tax
   const shipping = subtotal > 100 ? 0 : 10;
   const total = subtotal + tax + shipping;
@@ -38,45 +69,21 @@ export default function CartPage() {
     toast.success('Item removed from cart');
   };
 
-  if (items.length === 0) {
-    return (
-      <div className="min-h-screen bg-gray-50 py-12">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Your cart is empty</h1>
-            <p className="text-gray-600 mb-6">Looks like you haven't added anything to your cart yet.</p>
-            <Link
-              href="/products"
-              className="inline-flex items-center px-6 py-3 bg-black text-white font-medium rounded-md hover:bg-gray-800 transition-colors"
-            >
-              Continue Shopping
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
               <div key={`${item.id}-${item.size}-${item.color}`} className="bg-white rounded-lg shadow-sm p-6">
-                <div className="grid grid-cols-4 gap-4 md:flex md:items-center md:space-x-4">
+                <div className="grid grid-cols-4 gap-4 md:flex md:items-center md:space-x-4 justify-between">
                   <div className="col-span-1 md:flex-shrink-0 md:w-24 md:h-24 relative rounded-lg overflow-hidden">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={item.image} alt={item.name} fill className="object-cover" />
                   </div>
-                  
+
                   <div className="col-span-3 md:flex-1 md:min-w-[250px] md:max-w-[250px]">
                     <Link href={`/product/${item.slug}`} className="text-lg font-medium text-gray-900 hover:text-blue-600">
                       {item.name}
@@ -85,9 +92,11 @@ export default function CartPage() {
                       {item.size && <span>Size: {item.size}</span>}
                       {item.color && <span>Color: {item.color}</span>}
                     </div>
-                    <p className="mt-1 text-lg font-medium text-gray-900">{defaultContants.RUPEE_SIGN}{item.price}</p>
+                    <p className="mt-1 text-lg font-medium text-gray-900">
+                      {defaultContants.RUPEE_SIGN}{item.price}
+                    </p>
                   </div>
-                  
+
                   <div className="col-span-2 md:flex md:items-center md:space-x-2">
                     <button
                       onClick={() => handleQuantityChange(item.id, item.quantity - 1, item.size, item.color)}
@@ -103,28 +112,28 @@ export default function CartPage() {
                       <PlusIcon className="h-4 w-4 text-gray-600" />
                     </button>
                   </div>
-                  
-                  <div className="col-span-2 text-right">
+
+                  <div className="col-span-2 text-right flex items-center space-x-2 justify-end">
                     <p className="text-lg font-medium text-gray-900">
                       {defaultContants.RUPEE_SIGN}{(item.price * item.quantity).toFixed(2)}
                     </p>
-                    {/* <button
+                    <button
                       onClick={() => handleRemoveItem(item.id, item.size, item.color)}
-                      className="mt-2 text-red-600 hover:text-red-800 transition-colors"
+                      className="text-red-600 hover:text-red-800 transition-colors"
                     >
                       <TrashIcon className="h-5 w-5" />
-                    </button> */}
+                    </button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          
+
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
               <h2 className="text-lg font-medium text-gray-900 mb-4">Order Summary</h2>
-              
+
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal ({items.length} items)</span>
@@ -147,14 +156,14 @@ export default function CartPage() {
                   </div>
                 </div>
               </div>
-              
+
               <Link
-                href="/checkout"
+                href={user ? "/checkout" : "/login"}
                 className="w-full bg-black text-white py-3 px-4 rounded-md font-medium hover:bg-gray-800 transition-colors text-center block"
               >
-                Proceed to Checkout
+                {user ? "Proceed to Checkout" : "Login to Checkout"}
               </Link>
-              
+
               <button
                 onClick={() => {
                   clearCart();
@@ -164,7 +173,7 @@ export default function CartPage() {
               >
                 Clear Cart
               </button>
-              
+
               <div className="mt-4 text-center">
                 <Link
                   href="/products"

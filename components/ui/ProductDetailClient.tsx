@@ -67,7 +67,6 @@ interface ProductDetailClientProps {
 }
 
 export default function ProductDetailClient({ product, relatedProducts }: ProductDetailClientProps) {
-  console.log(product)
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -75,7 +74,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewComment, setReviewComment] = useState('');
-  const [stockData, setStockData] = useState<Record<string, Record<string, { stock: number; available: boolean; sku: string | null }>>>({});
+  const [stockData, setStockData] = useState<Record<string, Record<string, { stock: number; available: boolean; sku: string | null;variantId: string }>>>({});
   const [colorImages, setColorImages] = useState<Record<string, string[]>>({});
 
   const { user } = useAuthStore();
@@ -84,7 +83,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
 
   // Process variants data on component mount
   useEffect(() => {
-    const processedStockData: Record<string, Record<string, { stock: number; available: boolean; sku: string | null }>> = {};
+    const processedStockData: Record<string, Record<string, { stock: number; available: boolean; sku: string | null; variantId: string }>> = {};
     const processedColorImages: Record<string, string[]> = {};
 
     product.variants?.forEach(variant => {
@@ -95,7 +94,8 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
       processedStockData[variant.color][variant.size] = {
         stock: variant.stock,
         available: variant.stock > 0,
-        sku: variant.sku
+        sku: variant.sku,
+        variantId: variant.id
       };
 
       // Process color-specific images
@@ -117,7 +117,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
       }
     }
   }, [product.variants, product.colors, selectedColor]);
-
+console.log("stock", stockData)
   // Auto-select first available size when color changes
   useEffect(() => {
     if (selectedColor && stockData[selectedColor] && !selectedSize) {
@@ -147,6 +147,13 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
       return null;
     }
     return stockData[selectedColor][selectedSize]?.sku || null;
+  };
+
+    const getCurrentVariantId = () => {
+    if (!selectedColor || !selectedSize || !stockData[selectedColor]) {
+      return "";
+    }
+    return stockData[selectedColor][selectedSize]?.variantId || "";
   };
 
   const isCurrentVariantAvailable = () => {
@@ -207,9 +214,9 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
       toast.error(`Only ${currentStock} items available`);
       return;
     }
-
+    
     addToCart({
-      id: product.id,
+      id: getCurrentVariantId(),
       name: product.name,
       price: product.price,
       image: product.images[0],
@@ -274,7 +281,7 @@ export default function ProductDetailClient({ product, relatedProducts }: Produc
   const totalStock = getTotalStock();
   const availableColors = getAvailableColors();
   const availableSizes = getAvailableSizes();
-  // console.log("product><>>>>>>>>>>>",product)
+  
   return (
     <div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
